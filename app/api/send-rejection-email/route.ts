@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
     const ccList = creatorEmail ? [creatorEmail] : undefined;
 
     const result = await resend.emails.send({
-      from: 'Spotlightly <onboarding@resend.dev>',
+      from: 'Spotlightly <noreply@spotlightly.club>',
       to: recipients,
       cc: ccList,
       subject,
