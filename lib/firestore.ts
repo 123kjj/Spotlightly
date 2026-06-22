@@ -217,6 +217,21 @@ export async function getAllPendingEntries(): Promise<Entry[]> {
   return snap.docs.map(d => firestoreEntryToEntry(d.id, d.data()));
 }
 
+// ── Contact Messages ────────────────────────────────────────────────────────
+
+export async function submitContactMessage(data: {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}) {
+  await addDoc(collection(db, 'contactMessages'), {
+    ...data,
+    createdAt: serverTimestamp(),
+    status: 'new',
+  });
+}
+
 // ── YouTube ───────────────────────────────────────────────────────────────────
 
 export function extractYouTubeId(url: string): string | null {
