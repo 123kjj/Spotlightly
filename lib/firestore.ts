@@ -9,8 +9,14 @@ import { Contest, Entry, Vote, Report, RejectionReason } from '@/types';
 // ── Contests ──────────────────────────────────────────────────────────────────
 
 export async function createContest(data: Omit<Contest, 'id' | 'createdAt' | 'status'>) {
+  // Firestore rejects `undefined` field values outright, so strip any out first
+  // (e.g. optional reward fields left blank when rewardAvailable is false).
+  const cleanData = Object.fromEntries(
+    Object.entries(data).filter(([, value]) => value !== undefined)
+  );
+
   const ref = await addDoc(collection(db, 'contests'), {
-    ...data,
+    ...cleanData,
     startDate: Timestamp.fromDate(data.startDate),
     endDate: Timestamp.fromDate(data.endDate),
     createdAt: serverTimestamp(),
@@ -66,8 +72,14 @@ function firestoreContestToContest(id: string, data: Record<string, unknown>): C
 // ── Entries ───────────────────────────────────────────────────────────────────
 
 export async function submitEntry(data: Omit<Entry, 'id' | 'createdAt' | 'voteCount' | 'status'>) {
+  // Firestore rejects `undefined` field values outright, so strip any out first
+  // (e.g. an optional `description` left blank by the entrant).
+  const cleanData = Object.fromEntries(
+    Object.entries(data).filter(([, value]) => value !== undefined)
+  );
+
   const ref = await addDoc(collection(db, 'entries'), {
-    ...data,
+    ...cleanData,
     waiverTimestamp: Timestamp.fromDate(data.waiverTimestamp),
     voteCount: 0,
     status: 'pending',

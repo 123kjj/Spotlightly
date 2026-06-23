@@ -40,9 +40,19 @@ export default function CreateContestPage() {
       return;
     }
 
-    if (form.rewardAvailable && !form.hostEmail.trim()) {
-      setError('Please provide a contact email so winners know how to claim their reward.');
-      return;
+    if (form.rewardAvailable) {
+      if (!form.rewardTitle.trim()) {
+        setError('Please provide a reward title.');
+        return;
+      }
+      if (!form.rewardDescription.trim()) {
+        setError('Please provide a reward description.');
+        return;
+      }
+      if (!form.hostEmail.trim()) {
+        setError('Please provide a contact email so winners know how to claim their reward.');
+        return;
+      }
     }
 
     setLoading(true);
@@ -203,7 +213,6 @@ export default function CreateContestPage() {
                 <label className="block text-sm font-medium text-purple-700 mb-2">Reward Title *</label>
                 <input
                   type="text"
-                  required={form.rewardAvailable}
                   value={form.rewardTitle}
                   onChange={e => update('rewardTitle', e.target.value)}
                   className="input-dreamy"
@@ -213,7 +222,6 @@ export default function CreateContestPage() {
               <div>
                 <label className="block text-sm font-medium text-purple-700 mb-2">Reward Description *</label>
                 <textarea
-                  required={form.rewardAvailable}
                   value={form.rewardDescription}
                   onChange={e => update('rewardDescription', e.target.value)}
                   className="input-dreamy h-20 resize-none"
@@ -224,7 +232,6 @@ export default function CreateContestPage() {
                 <label className="block text-sm font-medium text-purple-700 mb-2">Your Contact Email (for winners) *</label>
                 <input
                   type="email"
-                  required={form.rewardAvailable}
                   value={form.hostEmail}
                   onChange={e => update('hostEmail', e.target.value)}
                   className="input-dreamy"

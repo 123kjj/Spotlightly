@@ -73,8 +73,10 @@ export default function SubmitEntryPage() {
         submittedBy: user.uid,
       });
       setSubmitted(true);
-    } catch {
-      setError('Submission failed. Please try again.');
+    } catch (err: unknown) {
+      console.error('Submit entry error:', err);
+      const msg = (err as { message?: string })?.message ?? String(err);
+      setError(`Submission failed: ${msg}`);
       setLoading(false);
     }
   }
