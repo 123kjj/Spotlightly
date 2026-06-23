@@ -92,7 +92,7 @@ export default function CreateContestPage() {
       <div className="max-w-lg mx-auto px-4 py-24 text-center">
         <div className="text-6xl mb-4 animate-float">🔒</div>
         <h2 className="text-2xl font-bold text-purple-900 mb-3">Sign in required</h2>
-        <p className="text-purple-500 mb-6">You need to be signed in to create a contest.</p>
+        <p className="text-purple-700 mb-6">You need to be signed in to create a contest.</p>
         <Link href="/auth/login" className="btn-primary">Sign In</Link>
       </div>
     );
@@ -106,7 +106,7 @@ export default function CreateContestPage() {
           <Trophy className="w-8 h-8 text-white" />
         </div>
         <h1 className="text-3xl font-extrabold gradient-text mb-2">Create a Contest</h1>
-        <p className="text-purple-500">Set the stage for something magical ✨</p>
+        <p className="text-purple-700">Set the stage for something magical ✨</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -210,7 +210,7 @@ export default function CreateContestPage() {
               <label key={String(val)} className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-2xl cursor-pointer transition-all border-2 ${
                 form.rewardAvailable === val
                   ? 'border-purple-400 bg-purple-50/50 text-purple-700 font-medium'
-                  : 'border-transparent glass text-purple-400'
+                  : 'border-transparent glass text-purple-600'
               }`}>
                 <input
                   type="radio"
@@ -254,7 +254,7 @@ export default function CreateContestPage() {
                   className="input-dreamy"
                   placeholder="you@example.com"
                 />
-                <p className="text-xs text-purple-400 mt-1.5">
+                <p className="text-xs text-purple-600 mt-1.5">
                   This will be shown to winners so they know where to email to claim their reward.
                 </p>
               </div>

@@ -100,7 +100,7 @@ export default function EntryCard({ entry, contestId, hasVoted, onVoteChange, ra
         {/* Info */}
         <div className="p-4">
           <h3 className="font-bold text-purple-900 text-sm mb-1 line-clamp-2">{entry.entryTitle}</h3>
-          <p className="text-xs text-purple-500 mb-3">
+          <p className="text-xs text-purple-700 mb-3">
             {entry.firstName} · Age {entry.age}
           </p>
 
@@ -124,7 +124,7 @@ export default function EntryCard({ entry, contestId, hasVoted, onVoteChange, ra
               {/* Share */}
               <button
                 onClick={handleShare}
-                className="p-2 rounded-full text-purple-400 hover:text-purple-600 hover:bg-purple-50 transition-all relative"
+                className="p-2 rounded-full text-purple-600 hover:text-purple-600 hover:bg-purple-50 transition-all relative"
                 title="Share"
               >
                 <Share2 className="w-4 h-4" />
@@ -140,7 +140,7 @@ export default function EntryCard({ entry, contestId, hasVoted, onVoteChange, ra
                 href={entry.youtubeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-full text-purple-400 hover:text-purple-600 hover:bg-purple-50 transition-all"
+                className="p-2 rounded-full text-purple-600 hover:text-purple-600 hover:bg-purple-50 transition-all"
                 title="Watch on YouTube"
               >
                 <ExternalLink className="w-4 h-4" />

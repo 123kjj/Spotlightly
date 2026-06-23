@@ -10,7 +10,7 @@ export default function GuidelinesPage() {
   return (
     <LegalPageLayout title="Community Guidelines" icon="🌟">
       <div className="text-center mb-10">
-        <p className="text-sm font-semibold text-purple-400 uppercase tracking-wide mb-2">Our Goal</p>
+        <p className="text-sm font-semibold text-purple-600 uppercase tracking-wide mb-2">Our Goal</p>
         <p className="text-lg text-purple-800 font-medium">
           Create a safe, welcoming, and creative environment.
         </p>
@@ -48,7 +48,7 @@ export default function GuidelinesPage() {
       </LegalSection>
 
       <div className="mt-8 pt-6 border-t border-purple-100 text-center">
-        <p className="text-sm text-purple-400 mb-3">See something that doesn't belong?</p>
+        <p className="text-sm text-purple-600 mb-3">See something that doesn't belong?</p>
         <Link href="/contact" className="btn-primary inline-flex text-sm py-2.5">
           <Flag className="w-4 h-4" /> Report an Issue
         </Link>

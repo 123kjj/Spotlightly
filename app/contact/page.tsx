@@ -21,6 +21,18 @@ export default function ContactPage() {
     setError('');
     try {
       await submitContactMessage(form);
+
+      // Notify the site owner by email — best-effort, don't block success on this
+      try {
+        await fetch('/api/send-contact-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(form),
+        });
+      } catch (emailErr) {
+        console.error('Failed to send contact notification email:', emailErr);
+      }
+
       setSubmitted(true);
     } catch (err: unknown) {
       console.error('Contact form error:', err);
@@ -33,14 +45,14 @@ export default function ContactPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
-      <Link href="/" className="inline-flex items-center gap-2 text-purple-500 hover:text-purple-700 mb-8 transition-colors text-sm">
+      <Link href="/" className="inline-flex items-center gap-2 text-purple-700 hover:text-purple-700 mb-8 transition-colors text-sm">
         <ArrowLeft className="w-4 h-4" /> Back to Home
       </Link>
 
       <div className="text-center mb-10">
         <div className="text-5xl mb-4 animate-float">💌</div>
         <h1 className="text-4xl md:text-5xl font-extrabold gradient-text mb-3">Contact Us</h1>
-        <p className="text-purple-400">Have a question, concern, or report? We'd love to hear from you.</p>
+        <p className="text-purple-600">Have a question, concern, or report? We'd love to hear from you.</p>
       </div>
 
       <div className="glass rounded-3xl p-6 sm:p-10 glow-lavender">
@@ -48,7 +60,7 @@ export default function ContactPage() {
           <div className="text-center py-10">
             <div className="text-6xl mb-4 animate-float">✨</div>
             <h2 className="text-2xl font-bold gradient-text mb-2">Message Sent!</h2>
-            <p className="text-purple-500 mb-6">Thanks for reaching out — we'll get back to you soon.</p>
+            <p className="text-purple-700 mb-6">Thanks for reaching out — we'll get back to you soon.</p>
             <button
               onClick={() => { setSubmitted(false); setForm({ name: '', email: '', subject: '', message: '' }); }}
               className="btn-secondary text-sm"
@@ -62,7 +74,7 @@ export default function ContactPage() {
               <div>
                 <label className="block text-sm font-medium text-purple-700 mb-2">Name</label>
                 <div className="relative">
-                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-400" />
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-600" />
                   <input
                     type="text" required value={form.name} onChange={e => update('name', e.target.value)}
                     className="input-dreamy pl-10" placeholder="Jane Doe"
@@ -72,7 +84,7 @@ export default function ContactPage() {
               <div>
                 <label className="block text-sm font-medium text-purple-700 mb-2">Email</label>
                 <div className="relative">
-                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-400" />
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-600" />
                   <input
                     type="email" required value={form.email} onChange={e => update('email', e.target.value)}
                     className="input-dreamy pl-10" placeholder="you@example.com"
@@ -84,7 +96,7 @@ export default function ContactPage() {
             <div>
               <label className="block text-sm font-medium text-purple-700 mb-2">Subject</label>
               <div className="relative">
-                <MessageSquare className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-400" />
+                <MessageSquare className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-600" />
                 <input
                   type="text" required value={form.subject} onChange={e => update('subject', e.target.value)}
                   className="input-dreamy pl-10" placeholder="What's this about?"

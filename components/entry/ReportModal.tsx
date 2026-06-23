@@ -58,7 +58,7 @@ export default function ReportModal({ entry, contestId, onClose }: Props) {
           <div className="text-center py-8">
             <div className="text-4xl mb-3">✅</div>
             <p className="font-semibold text-purple-900">Report Submitted</p>
-            <p className="text-sm text-purple-500 mt-1">Our team will review this entry.</p>
+            <p className="text-sm text-purple-700 mt-1">Our team will review this entry.</p>
             <button onClick={onClose} className="btn-primary mt-4 text-sm">Close</button>
           </div>
         ) : (

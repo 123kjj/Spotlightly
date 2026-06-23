@@ -53,7 +53,7 @@ export default function SignUpPage() {
               <Sparkles className="w-7 h-7 text-white" />
             </div>
             <h1 className="text-2xl font-extrabold gradient-text">Join Spotlightly</h1>
-            <p className="text-purple-400 text-sm mt-1">Create your account and start shining ✨</p>
+            <p className="text-purple-600 text-sm mt-1">Create your account and start shining ✨</p>
           </div>
 
           <button onClick={handleGoogle} disabled={googleLoading}
@@ -81,7 +81,7 @@ export default function SignUpPage() {
             <div>
               <label className="block text-sm font-medium text-purple-700 mb-2">Full Name</label>
               <div className="relative">
-                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-400" />
+                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-600" />
                 <input type="text" required value={form.name} onChange={e => update('name', e.target.value)}
                   className="input-dreamy pl-10" placeholder="Jane Doe" />
               </div>
@@ -89,7 +89,7 @@ export default function SignUpPage() {
             <div>
               <label className="block text-sm font-medium text-purple-700 mb-2">Email</label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-400" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-600" />
                 <input type="email" required value={form.email} onChange={e => update('email', e.target.value)}
                   className="input-dreamy pl-10" placeholder="you@example.com" />
               </div>
@@ -97,11 +97,11 @@ export default function SignUpPage() {
             <div>
               <label className="block text-sm font-medium text-purple-700 mb-2">Password</label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-400" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-600" />
                 <input type={showPw ? 'text' : 'password'} required value={form.password} onChange={e => update('password', e.target.value)}
                   className="input-dreamy pl-10 pr-10" placeholder="Min 6 characters" />
                 <button type="button" onClick={() => setShowPw(!showPw)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-purple-400 hover:text-purple-600">
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-purple-600 hover:text-purple-600">
                   {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
@@ -109,7 +109,7 @@ export default function SignUpPage() {
             <div>
               <label className="block text-sm font-medium text-purple-700 mb-2">Confirm Password</label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-400" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-600" />
                 <input type={showPw ? 'text' : 'password'} required value={form.confirm} onChange={e => update('confirm', e.target.value)}
                   className="input-dreamy pl-10" placeholder="Repeat password" />
               </div>
@@ -124,7 +124,7 @@ export default function SignUpPage() {
             </button>
           </form>
 
-          <p className="text-center text-sm text-purple-400 mt-6">
+          <p className="text-center text-sm text-purple-600 mt-6">
             Already have an account?{' '}
             <Link href="/auth/login" className="text-purple-600 font-semibold hover:underline">Sign in</Link>
           </p>

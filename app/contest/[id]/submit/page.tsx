@@ -86,7 +86,7 @@ export default function SubmitEntryPage() {
       <div className="max-w-lg mx-auto px-4 py-24 text-center">
         <div className="text-6xl mb-4 animate-float">🔒</div>
         <h2 className="text-2xl font-bold text-purple-900 mb-3">Sign in required</h2>
-        <p className="text-purple-500 mb-6">You need to be signed in to submit an entry.</p>
+        <p className="text-purple-700 mb-6">You need to be signed in to submit an entry.</p>
         <Link href="/auth/login" className="btn-primary">Sign In</Link>
       </div>
     );
@@ -98,7 +98,7 @@ export default function SubmitEntryPage() {
         <div className="text-7xl mb-4 animate-float">🌟</div>
         <h2 className="text-3xl font-extrabold gradient-text mb-3">Entry Submitted!</h2>
         <p className="text-purple-600 mb-2">Your entry is now <strong>pending review</strong>.</p>
-        <p className="text-sm text-purple-400 mb-8">Once approved by an admin, it will appear publicly in the contest.</p>
+        <p className="text-sm text-purple-600 mb-8">Once approved by an admin, it will appear publicly in the contest.</p>
         <Link href={`/contest/${contestId}`} className="btn-primary">
           View Contest
         </Link>
@@ -113,7 +113,7 @@ export default function SubmitEntryPage() {
           <Video className="w-8 h-8 text-white" />
         </div>
         <h1 className="text-3xl font-extrabold gradient-text mb-2">Submit Your Entry</h1>
-        <p className="text-purple-500">Share your YouTube video and enter the competition ✨</p>
+        <p className="text-purple-700">Share your YouTube video and enter the competition ✨</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -160,7 +160,7 @@ export default function SubmitEntryPage() {
                 placeholder="https://www.youtube.com/watch?v=..."
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                {youtubeStatus === 'checking' && <Loader className="w-4 h-4 text-purple-400 animate-spin" />}
+                {youtubeStatus === 'checking' && <Loader className="w-4 h-4 text-purple-600 animate-spin" />}
                 {youtubeStatus === 'valid' && <CheckCircle className="w-4 h-4 text-green-500" />}
                 {youtubeStatus === 'invalid' && <AlertCircle className="w-4 h-4 text-red-400" />}
               </div>
@@ -197,7 +197,7 @@ export default function SubmitEntryPage() {
         {/* Waiver */}
         <div className="glass rounded-3xl p-6">
           <h2 className="font-bold text-purple-900 flex items-center gap-2 mb-3">
-            <Shield className="w-4 h-4 text-purple-400" /> Waiver & Agreement
+            <Shield className="w-4 h-4 text-purple-600" /> Waiver & Agreement
           </h2>
           <div className="bg-purple-50/50 rounded-2xl p-4 text-sm text-purple-600 leading-relaxed mb-4">
             {WAIVER_TEXT}

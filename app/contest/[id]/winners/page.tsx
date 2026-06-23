@@ -44,7 +44,7 @@ function WinnerCard({ entry, place, size = 'normal' }: { entry: Entry; place: 1 
       </div>
       <div className="p-4 text-center">
         <p className="font-bold text-purple-900 line-clamp-2 mb-1">{entry.entryTitle}</p>
-        <p className="text-sm text-purple-500 mb-2">{entry.firstName} · Age {entry.age}</p>
+        <p className="text-sm text-purple-700 mb-2">{entry.firstName} · Age {entry.age}</p>
         <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-pink-50 text-pink-600 text-sm font-bold">
           ❤️ {entry.voteCount} votes
         </div>
@@ -97,7 +97,7 @@ export default function WinnersPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
       {/* Back */}
-      <Link href={`/contest/${contestId}`} className="inline-flex items-center gap-2 text-purple-500 hover:text-purple-700 mb-8 transition-colors">
+      <Link href={`/contest/${contestId}`} className="inline-flex items-center gap-2 text-purple-700 hover:text-purple-700 mb-8 transition-colors">
         <ArrowLeft className="w-4 h-4" /> Back to Contest
       </Link>
 
@@ -111,7 +111,7 @@ export default function WinnersPage() {
         <h1 className="text-4xl md:text-6xl font-extrabold gradient-text-gold mb-3">
           {contest?.title}
         </h1>
-        <p className="text-xl text-purple-500 flex items-center justify-center gap-2">
+        <p className="text-xl text-purple-700 flex items-center justify-center gap-2">
           <Trophy className="w-5 h-5 text-yellow-500" />
           Contest Winners
           <Trophy className="w-5 h-5 text-yellow-500" />
@@ -122,7 +122,7 @@ export default function WinnersPage() {
             <p className="text-sm font-semibold text-purple-900">
               🎁 {contest.rewardTitle}
             </p>
-            <p className="text-sm text-purple-500">
+            <p className="text-sm text-purple-700">
               Contact{' '}
               <a href={`mailto:${contest.hostEmail}?subject=Spotlightly — ${contest.title}`}
                 className="font-semibold text-purple-700 hover:underline">
@@ -138,7 +138,7 @@ export default function WinnersPage() {
         <div className="text-center py-16 glass rounded-3xl">
           <div className="text-5xl mb-4">🤔</div>
           <p className="text-xl font-bold text-purple-900">No winners yet</p>
-          <p className="text-purple-400 mt-2">There are no approved entries for this contest.</p>
+          <p className="text-purple-600 mt-2">There are no approved entries for this contest.</p>
         </div>
       ) : (
         <>
@@ -182,14 +182,14 @@ export default function WinnersPage() {
               <div className="space-y-3">
                 {entries.slice(3).map((entry, i) => (
                   <div key={entry.id} className="glass rounded-2xl p-4 flex items-center gap-4">
-                    <div className="text-lg font-bold text-purple-400 w-8 text-center">#{i + 4}</div>
+                    <div className="text-lg font-bold text-purple-600 w-8 text-center">#{i + 4}</div>
                     <img src={entry.thumbnailUrl} alt="" className="w-16 h-10 rounded-lg object-cover" />
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-purple-900 truncate">{entry.entryTitle}</p>
-                      <p className="text-xs text-purple-400">{entry.firstName} · {entry.voteCount} votes</p>
+                      <p className="text-xs text-purple-600">{entry.firstName} · {entry.voteCount} votes</p>
                     </div>
                     <a href={entry.youtubeUrl} target="_blank" rel="noopener noreferrer"
-                      className="p-2 rounded-full hover:bg-purple-50 text-purple-400 hover:text-purple-600 transition-colors">
+                      className="p-2 rounded-full hover:bg-purple-50 text-purple-600 hover:text-purple-600 transition-colors">
                       <ExternalLink className="w-4 h-4" />
                     </a>
                   </div>

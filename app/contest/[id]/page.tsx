@@ -62,7 +62,7 @@ export default function ContestPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-purple-500">Loading contest...</p>
+          <p className="text-purple-700">Loading contest...</p>
         </div>
       </div>
     );
@@ -110,8 +110,8 @@ export default function ContestPage() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-bold text-purple-900 text-xl flex items-center gap-2">
-                <Users className="w-5 h-5 text-purple-400" />
-                Entries <span className="text-purple-400 font-normal text-base">({entries.length})</span>
+                <Users className="w-5 h-5 text-purple-600" />
+                Entries <span className="text-purple-600 font-normal text-base">({entries.length})</span>
               </h2>
               {isActive && (
                 <Link href={`/contest/${id}/submit`} className="btn-primary text-sm py-2">
@@ -124,7 +124,7 @@ export default function ContestPage() {
               <div className="glass rounded-3xl p-12 text-center">
                 <div className="text-4xl mb-3 animate-float">🎬</div>
                 <p className="font-semibold text-purple-900 mb-1">No approved entries yet</p>
-                <p className="text-sm text-purple-400">
+                <p className="text-sm text-purple-600">
                   {isActive ? 'Be the first to submit!' : 'Check back soon.'}
                 </p>
                 {isActive && (
@@ -193,15 +193,15 @@ export default function ContestPage() {
           {/* Dates */}
           <div className="glass rounded-3xl p-5">
             <h3 className="font-bold text-purple-900 mb-3 flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-purple-400" /> Schedule
+              <Calendar className="w-4 h-4 text-purple-600" /> Schedule
             </h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-purple-400">Start</span>
+                <span className="text-purple-600">Start</span>
                 <span className="text-purple-700 font-medium">{format(contest.startDate, 'MMM d, yyyy')}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-purple-400">End</span>
+                <span className="text-purple-600">End</span>
                 <span className="text-purple-700 font-medium">{format(contest.endDate, 'MMM d, yyyy')}</span>
               </div>
             </div>
@@ -214,10 +214,10 @@ export default function ContestPage() {
                 <Gift className="w-4 h-4 text-yellow-500" /> Reward
               </h3>
               <p className="font-semibold text-yellow-700 mb-1">{contest.rewardTitle}</p>
-              <p className="text-sm text-purple-500 mb-3">{contest.rewardDescription}</p>
+              <p className="text-sm text-purple-700 mb-3">{contest.rewardDescription}</p>
               {contest.hostEmail && (
                 <div className="pt-3 border-t border-yellow-200/50">
-                  <p className="text-xs text-purple-400">
+                  <p className="text-xs text-purple-600">
                     💬 Contact{' '}
                     <a href={`mailto:${contest.hostEmail}`} className="font-semibold text-purple-600 hover:underline">
                       {contest.hostEmail}
@@ -238,7 +238,7 @@ export default function ContestPage() {
                   <span className="text-lg">{i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'}</span>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-purple-800 truncate">{entry.entryTitle}</p>
-                    <p className="text-xs text-purple-400">{entry.firstName}</p>
+                    <p className="text-xs text-purple-600">{entry.firstName}</p>
                   </div>
                   <span className="text-xs font-bold text-pink-500">❤️ {entry.voteCount}</span>
                 </div>

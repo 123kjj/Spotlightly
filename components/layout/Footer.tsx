@@ -21,16 +21,16 @@ export default function Footer() {
 
           {/* Links */}
           <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
-            <Link href="/terms" className="text-purple-500 hover:text-purple-800 transition-colors">
+            <Link href="/terms" className="text-purple-700 hover:text-purple-800 transition-colors">
               Terms of Service
             </Link>
-            <Link href="/privacy" className="text-purple-500 hover:text-purple-800 transition-colors">
+            <Link href="/privacy" className="text-purple-700 hover:text-purple-800 transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/guidelines" className="text-purple-500 hover:text-purple-800 transition-colors">
+            <Link href="/guidelines" className="text-purple-700 hover:text-purple-800 transition-colors">
               Community Guidelines
             </Link>
-            <Link href="/contact" className="text-purple-500 hover:text-purple-800 transition-colors">
+            <Link href="/contact" className="text-purple-700 hover:text-purple-800 transition-colors">
               Contact Us
             </Link>
           </nav>

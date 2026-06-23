@@ -80,7 +80,7 @@ export default function Navbar() {
                   <span className="text-sm font-medium text-purple-800 max-w-28 truncate">
                     {user.displayName ?? user.email}
                   </span>
-                  <ChevronDown className={`w-4 h-4 text-purple-500 transition-transform ${profileOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-4 h-4 text-purple-700 transition-transform ${profileOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {profileOpen && (

@@ -56,7 +56,7 @@ export default function ContestCard({ contest }: Props) {
           {contest.description}
         </p>
 
-        <div className="flex items-center gap-2 text-xs text-purple-400 mb-4">
+        <div className="flex items-center gap-2 text-xs text-purple-600 mb-4">
           <Calendar className="w-3.5 h-3.5" />
           <span>
             {isEnded

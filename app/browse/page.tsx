@@ -39,13 +39,13 @@ export default function BrowsePage() {
         <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
           <span className="gradient-text">Browse Contests</span>
         </h1>
-        <p className="text-purple-500 text-lg">Discover competitions and showcase your creativity</p>
+        <p className="text-purple-700 text-lg">Discover competitions and showcase your creativity</p>
       </div>
 
       {/* Search + Filter */}
       <div className="flex flex-col sm:flex-row gap-4 mb-8">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-400" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-600" />
           <input
             type="text"
             placeholder="Search contests..."
@@ -81,11 +81,11 @@ export default function BrowsePage() {
         <div className="text-center py-24">
           <div className="text-6xl mb-4">🔍</div>
           <h3 className="text-xl font-bold text-purple-900 mb-2">No contests found</h3>
-          <p className="text-purple-500">Try adjusting your search or filter</p>
+          <p className="text-purple-700">Try adjusting your search or filter</p>
         </div>
       ) : (
         <>
-          <p className="text-sm text-purple-400 mb-6">{filtered.length} contest{filtered.length !== 1 ? 's' : ''} found</p>
+          <p className="text-sm text-purple-600 mb-6">{filtered.length} contest{filtered.length !== 1 ? 's' : ''} found</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((c, i) => (
               <div key={c.id} className="animate-rise-in" style={{ animationDelay: `${i * 0.05}s`, opacity: 0 }}>

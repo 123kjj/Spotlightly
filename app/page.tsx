@@ -61,7 +61,7 @@ export default function HomePage() {
               <div key={stat.label} className="glass px-6 py-4 rounded-2xl text-center glow-lavender">
                 <div className="text-2xl mb-1">{stat.emoji}</div>
                 <div className="text-2xl font-bold gradient-text">{stat.value}</div>
-                <div className="text-xs text-purple-400 mt-0.5">{stat.label}</div>
+                <div className="text-xs text-purple-600 mt-0.5">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -74,7 +74,7 @@ export default function HomePage() {
             <h2 className="text-3xl font-bold text-purple-900">
               ✨ <span className="gradient-text">Contests</span>
             </h2>
-            <p className="text-purple-500 mt-1">Find your stage and shine</p>
+            <p className="text-purple-700 mt-1">Find your stage and shine</p>
           </div>
           <Link href="/browse" className="btn-secondary text-sm py-2 px-5">
             View All <ArrowRight className="w-4 h-4" />
@@ -91,7 +91,7 @@ export default function HomePage() {
           <div className="text-center py-24">
             <div className="text-6xl mb-4 animate-float">🌟</div>
             <h3 className="text-xl font-bold text-purple-900 mb-2">No contests yet</h3>
-            <p className="text-purple-500 mb-6">Be the first to create one!</p>
+            <p className="text-purple-700 mb-6">Be the first to create one!</p>
             <Link href="/create" className="btn-primary">
               <Zap className="w-4 h-4" /> Create First Contest
             </Link>

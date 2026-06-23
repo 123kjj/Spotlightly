@@ -58,7 +58,7 @@ export default function LoginPage() {
               <Star className="w-7 h-7 text-white fill-white" />
             </div>
             <h1 className="text-2xl font-extrabold gradient-text">Welcome back</h1>
-            <p className="text-purple-400 text-sm mt-1">Sign in to continue to Spotlightly</p>
+            <p className="text-purple-600 text-sm mt-1">Sign in to continue to Spotlightly</p>
           </div>
 
           {/* Google */}
@@ -91,7 +91,7 @@ export default function LoginPage() {
             <div>
               <label className="block text-sm font-medium text-purple-700 mb-2">Email</label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-400" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-600" />
                 <input
                   type="email" required value={email} onChange={e => setEmail(e.target.value)}
                   className="input-dreamy pl-10" placeholder="you@example.com"
@@ -101,13 +101,13 @@ export default function LoginPage() {
             <div>
               <label className="block text-sm font-medium text-purple-700 mb-2">Password</label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-400" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-600" />
                 <input
                   type={showPw ? 'text' : 'password'} required value={password} onChange={e => setPassword(e.target.value)}
                   className="input-dreamy pl-10 pr-10" placeholder="••••••••"
                 />
                 <button type="button" onClick={() => setShowPw(!showPw)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-purple-400 hover:text-purple-600">
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-purple-600 hover:text-purple-600">
                   {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
@@ -120,7 +120,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="text-center text-sm text-purple-400 mt-6">
+          <p className="text-center text-sm text-purple-600 mt-6">
             Don't have an account?{' '}
             <Link href="/auth/signup" className="text-purple-600 font-semibold hover:underline">Sign up</Link>
           </p>
