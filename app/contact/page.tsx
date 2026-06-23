@@ -21,6 +21,18 @@ export default function ContactPage() {
     setError('');
     try {
       await submitContactMessage(form);
+
+      // Notify the site owner by email — best-effort, don't block success on this
+      try {
+        await fetch('/api/send-contact-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(form),
+        });
+      } catch (emailErr) {
+        console.error('Failed to send contact notification email:', emailErr);
+      }
+
       setSubmitted(true);
     } catch (err: unknown) {
       console.error('Contact form error:', err);
