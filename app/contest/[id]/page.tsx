@@ -76,14 +76,8 @@ export default function ContestPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Banner */}
-      <div className="relative rounded-3xl overflow-hidden mb-8 h-64 md:h-80">
-        {contest.bannerUrl ? (
-          <img src={contest.bannerUrl} alt={contest.title} className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-purple-200 via-pink-100 to-blue-200 flex items-center justify-center">
-            <Trophy className="w-24 h-24 text-purple-300 animate-float" />
-          </div>
-        )}
+      <div className="relative rounded-3xl overflow-hidden mb-8 h-64 md:h-80 bg-gradient-to-br from-purple-200 via-pink-100 to-blue-200 flex items-center justify-center">
+        <span className="text-9xl drop-shadow-sm">{contest.bannerEmoji ?? '🏆'}</span>
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
         <div className="absolute bottom-6 left-6 right-6">

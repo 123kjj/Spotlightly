@@ -7,6 +7,12 @@ import { useAuth } from '@/lib/auth-context';
 import { Sparkles, Trophy, Calendar, Gift, FileText, Image } from 'lucide-react';
 import Link from 'next/link';
 
+const BANNER_EMOJIS = [
+  '🏆', '🎬', '🎤', '🎨', '🎭', '🎵', '🎸', '⭐',
+  '✨', '🌟', '🔥', '💃', '🕺', '🎮', '📸', '🎙️',
+  '🥇', '🌈', '🚀', '💎', '🎉', '🦄', '🐱', '🐶',
+];
+
 export default function CreateContestPage() {
   const { user } = useAuth();
   const router = useRouter();
@@ -17,6 +23,7 @@ export default function CreateContestPage() {
     title: '',
     description: '',
     bannerUrl: '',
+    bannerEmoji: '🏆',
     startDate: '',
     endDate: '',
     rules: '',
@@ -61,6 +68,7 @@ export default function CreateContestPage() {
         title: form.title,
         description: form.description,
         bannerUrl: form.bannerUrl,
+        bannerEmoji: form.bannerEmoji,
         startDate: new Date(form.startDate),
         endDate: new Date(form.endDate),
         rules: form.rules,
@@ -138,19 +146,28 @@ export default function CreateContestPage() {
             <Image className="w-4 h-4" /> Contest Banner
           </h2>
           <div>
-            <label className="block text-sm font-medium text-purple-700 mb-2">Banner Image URL</label>
-            <input
-              type="url"
-              value={form.bannerUrl}
-              onChange={e => update('bannerUrl', e.target.value)}
-              className="input-dreamy"
-              placeholder="https://..."
-            />
-            {form.bannerUrl && (
-              <div className="mt-3 rounded-2xl overflow-hidden h-40">
-                <img src={form.bannerUrl} alt="Banner preview" className="w-full h-full object-cover" />
+            <label className="block text-sm font-medium text-purple-700 mb-3">Choose an Emoji</label>
+            <div className="grid grid-cols-6 sm:grid-cols-8 gap-2">
+              {BANNER_EMOJIS.map(emoji => (
+                <button
+                  key={emoji}
+                  type="button"
+                  onClick={() => update('bannerEmoji', emoji)}
+                  className={`aspect-square rounded-2xl flex items-center justify-center text-2xl transition-all ${
+                    form.bannerEmoji === emoji
+                      ? 'bg-gradient-to-br from-purple-200 to-pink-200 ring-2 ring-purple-400 scale-110'
+                      : 'glass hover:bg-purple-50/50 hover:scale-105'
+                  }`}
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+            <div className="mt-4 flex items-center justify-center">
+              <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-purple-200 via-pink-100 to-blue-200 flex items-center justify-center text-5xl shadow-inner">
+                {form.bannerEmoji}
               </div>
-            )}
+            </div>
           </div>
         </div>
 

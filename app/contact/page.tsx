@@ -22,8 +22,10 @@ export default function ContactPage() {
     try {
       await submitContactMessage(form);
       setSubmitted(true);
-    } catch {
-      setError('Something went wrong. Please try again.');
+    } catch (err: unknown) {
+      console.error('Contact form error:', err);
+      const msg = (err as { message?: string })?.message ?? String(err);
+      setError(`Something went wrong: ${msg}`);
     } finally {
       setLoading(false);
     }

@@ -56,6 +56,7 @@ function firestoreContestToContest(id: string, data: Record<string, unknown>): C
     title: data.title as string,
     description: data.description as string,
     bannerUrl: data.bannerUrl as string,
+    bannerEmoji: data.bannerEmoji as string | undefined,
     startDate,
     endDate,
     rules: data.rules as string,

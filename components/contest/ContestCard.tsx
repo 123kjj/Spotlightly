@@ -25,18 +25,10 @@ export default function ContestCard({ contest }: Props) {
   return (
     <div className="contest-card glass rounded-3xl overflow-hidden group cursor-pointer" style={{ boxShadow: '0 4px 24px rgba(124,58,237,0.1)' }}>
       {/* Banner */}
-      <div className="relative h-48 overflow-hidden">
-        {contest.bannerUrl ? (
-          <img
-            src={contest.bannerUrl}
-            alt={contest.title}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-purple-200 via-pink-100 to-blue-200 flex items-center justify-center">
-            <Trophy className="w-16 h-16 text-purple-300 animate-float" />
-          </div>
-        )}
+      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-purple-200 via-pink-100 to-blue-200 flex items-center justify-center">
+        <span className="text-7xl group-hover:scale-110 transition-transform duration-500 drop-shadow-sm">
+          {contest.bannerEmoji ?? '🏆'}
+        </span>
 
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />

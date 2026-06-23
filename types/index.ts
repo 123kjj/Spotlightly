@@ -41,6 +41,7 @@ export interface Contest {
   title: string;
   description: string;
   bannerUrl: string;
+  bannerEmoji?: string;
   startDate: Date;
   endDate: Date;
   rules: string;
