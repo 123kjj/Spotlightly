@@ -21,6 +21,9 @@ export default function Footer() {
 
           {/* Links */}
           <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
+            <Link href="/about" className="text-purple-700 hover:text-purple-800 transition-colors">
+              About Us
+            </Link>
             <Link href="/terms" className="text-purple-700 hover:text-purple-800 transition-colors">
               Terms of Service
             </Link>
