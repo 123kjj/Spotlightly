@@ -226,6 +226,17 @@ export default function CreateContestPage() {
 
           {form.rewardAvailable && (
             <div className="space-y-3 pt-2">
+              <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
+                <span className="text-base flex-shrink-0">⚠️</span>
+                <p className="text-xs text-amber-800 leading-relaxed">
+                  As the contest creator, you are solely responsible for delivering this prize to the winner.
+                  Spotlightly does not sponsor, guarantee, or deliver prizes — see our{' '}
+                  <Link href="/terms" target="_blank" className="font-semibold underline hover:text-amber-900">
+                    Terms of Service
+                  </Link>{' '}
+                  for details.
+                </p>
+              </div>
               <div>
                 <label className="block text-sm font-medium text-purple-700 mb-2">Reward Title *</label>
                 <input

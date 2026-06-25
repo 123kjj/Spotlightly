@@ -52,6 +52,28 @@ export default function TermsPage() {
         ]} />
       </LegalSection>
 
+      <LegalSection title="Contest Prizes and Rewards">
+        <p className="mb-3">
+          Spotlightly serves solely as a platform that allows contest creators to host contests and participants to submit entries.
+        </p>
+        <p className="mb-2">Each contest creator is solely responsible for:</p>
+        <LegalList items={[
+          'Defining the contest rules.',
+          'Describing the prize or reward.',
+          'Selecting the winner (if applicable under the contest rules).',
+          'Delivering the advertised prize or reward to the winner.',
+        ]} />
+        <p className="mt-3">
+          Spotlightly does not sponsor, guarantee, verify, or deliver prizes offered by contest creators.
+        </p>
+        <p className="mt-2">
+          Spotlightly is not responsible or liable if a contest creator fails to deliver a prize, delays delivery, changes the prize, or otherwise does not fulfill the promises made in their contest.
+        </p>
+        <p className="mt-2">
+          Any disputes regarding prizes or rewards are between the contest creator and the participants. Spotlightly may, at its sole discretion, investigate reports of abuse or repeated violations and may remove contests or suspend accounts that violate our policies.
+        </p>
+      </LegalSection>
+
       <LegalSection title="Limitation of Liability">
         <LegalList items={[
           'Spotlightly is provided as-is.',
