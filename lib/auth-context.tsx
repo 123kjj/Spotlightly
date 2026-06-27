@@ -3,11 +3,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import {
   onAuthStateChanged,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile,
   User as FirebaseUser,
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
@@ -17,10 +14,10 @@ interface AuthContextType {
   user: FirebaseUser | null;
   isAdmin: boolean;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, name: string) => Promise<void>;
+  onboardingComplete: boolean;
   signInWithGoogle: () => Promise<void>;
   logOut: () => Promise<void>;
+  refreshUserDoc: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -28,16 +25,24 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [onboardingComplete, setOnboardingComplete] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  async function loadUserDoc(firebaseUser: FirebaseUser) {
+    const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
+    const data = snap.data();
+    setIsAdmin(data?.isAdmin === true);
+    setOnboardingComplete(data?.onboardingComplete === true);
+  }
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
       if (firebaseUser) {
-        const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
-        setIsAdmin(snap.data()?.isAdmin === true);
+        await loadUserDoc(firebaseUser);
       } else {
         setIsAdmin(false);
+        setOnboardingComplete(false);
       }
       setLoading(false);
     });
@@ -54,32 +59,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         displayName: firebaseUser.displayName,
         photoURL: firebaseUser.photoURL,
         isAdmin: false,
+        onboardingComplete: false,
         createdAt: serverTimestamp(),
       });
     }
   }
 
-  async function signIn(email: string, password: string) {
-    await signInWithEmailAndPassword(auth, email, password);
-  }
-
-  async function signUp(email: string, password: string, name: string) {
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
-    await updateProfile(cred.user, { displayName: name });
-    await ensureUserDoc(cred.user);
-  }
-
   async function signInWithGoogle() {
     const cred = await signInWithPopup(auth, googleProvider);
     await ensureUserDoc(cred.user);
+    await loadUserDoc(cred.user);
   }
 
   async function logOut() {
     await signOut(auth);
   }
 
+  async function refreshUserDoc() {
+    if (user) await loadUserDoc(user);
+  }
+
   return (
-    <AuthContext.Provider value={{ user, isAdmin, loading, signIn, signUp, signInWithGoogle, logOut }}>
+    <AuthContext.Provider value={{ user, isAdmin, loading, onboardingComplete, signInWithGoogle, logOut, refreshUserDoc }}>
       {children}
     </AuthContext.Provider>
   );

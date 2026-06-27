@@ -46,7 +46,7 @@ export default function CookieBanner() {
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center flex-shrink-0">
             <Cookie className="w-4 h-4 text-white" />
           </div>
-          <p className="text-sm text-purple-700 leading-relaxed">
+          <p className="text-sm text-gray-700 leading-relaxed">
             Spotlightly uses cookies and similar technologies to keep you signed in and improve your experience.
           </p>
         </div>

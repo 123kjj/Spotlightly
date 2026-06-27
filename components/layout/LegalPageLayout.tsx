@@ -21,7 +21,7 @@ export default function LegalPageLayout({ title, subtitle, icon, children }: Pro
       <div className="text-center mb-10">
         {icon && <div className="text-5xl mb-4 animate-float">{icon}</div>}
         <h1 className="text-4xl md:text-5xl font-extrabold gradient-text mb-3">{title}</h1>
-        {subtitle && <p className="text-purple-600 text-sm">{subtitle}</p>}
+        {subtitle && <p className="text-gray-600 text-sm">{subtitle}</p>}
       </div>
 
       <div className="glass rounded-3xl p-6 sm:p-10 glow-lavender">

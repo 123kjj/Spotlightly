@@ -58,7 +58,7 @@ export default function ReportModal({ entry, contestId, onClose }: Props) {
           <div className="text-center py-8">
             <div className="text-4xl mb-3">✅</div>
             <p className="font-semibold text-purple-900">Report Submitted</p>
-            <p className="text-sm text-purple-700 mt-1">Our team will review this entry.</p>
+            <p className="text-sm text-gray-700 mt-1">Our team will review this entry.</p>
             <button onClick={onClose} className="btn-primary mt-4 text-sm">Close</button>
           </div>
         ) : (
@@ -66,7 +66,7 @@ export default function ReportModal({ entry, contestId, onClose }: Props) {
             {!user && (
               <p className="text-sm text-red-500 mb-4">Please sign in to report an entry.</p>
             )}
-            <p className="text-sm text-purple-600 mb-4">
+            <p className="text-sm text-gray-700 mb-4">
               Report "<strong>{entry.entryTitle}</strong>" for:
             </p>
             <div className="space-y-2 mb-4">

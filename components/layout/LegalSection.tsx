@@ -7,7 +7,7 @@ export function LegalSection({ title, children }: { title: string; children: Rea
         <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500" />
         {title}
       </h2>
-      <div className="text-purple-600 text-sm leading-relaxed space-y-2">
+      <div className="text-gray-700 text-sm leading-relaxed space-y-2">
         {children}
       </div>
     </div>

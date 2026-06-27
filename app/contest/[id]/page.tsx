@@ -62,7 +62,7 @@ export default function ContestPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-purple-700">Loading contest...</p>
+          <p className="text-gray-700">Loading contest...</p>
         </div>
       </div>
     );
@@ -97,13 +97,13 @@ export default function ContestPage() {
           {/* Description */}
           <div className="glass rounded-3xl p-6">
             <h2 className="font-bold text-purple-900 text-lg mb-3">About this Contest</h2>
-            <p className="text-purple-600 leading-relaxed">{contest.description}</p>
+            <p className="text-gray-700 leading-relaxed">{contest.description}</p>
           </div>
 
           {/* Rules */}
           <div className="glass rounded-3xl p-6">
             <h2 className="font-bold text-purple-900 text-lg mb-3">📋 Rules</h2>
-            <div className="text-purple-600 leading-relaxed whitespace-pre-wrap text-sm">{contest.rules}</div>
+            <div className="text-gray-700 leading-relaxed whitespace-pre-wrap text-sm">{contest.rules}</div>
           </div>
 
           {/* Entries */}
@@ -124,7 +124,7 @@ export default function ContestPage() {
               <div className="glass rounded-3xl p-12 text-center">
                 <div className="text-4xl mb-3 animate-float">🎬</div>
                 <p className="font-semibold text-purple-900 mb-1">No approved entries yet</p>
-                <p className="text-sm text-purple-600">
+                <p className="text-sm text-gray-700">
                   {isActive ? 'Be the first to submit!' : 'Check back soon.'}
                 </p>
                 {isActive && (
@@ -214,10 +214,10 @@ export default function ContestPage() {
                 <Gift className="w-4 h-4 text-yellow-500" /> Reward
               </h3>
               <p className="font-semibold text-yellow-700 mb-1">{contest.rewardTitle}</p>
-              <p className="text-sm text-purple-700 mb-3">{contest.rewardDescription}</p>
+              <p className="text-sm text-gray-700 mb-3">{contest.rewardDescription}</p>
               {contest.hostEmail && (
                 <div className="pt-3 border-t border-yellow-200/50">
-                  <p className="text-xs text-purple-600">
+                  <p className="text-xs text-gray-600">
                     💬 Contact{' '}
                     <a href={`mailto:${contest.hostEmail}`} className="font-semibold text-purple-600 hover:underline">
                       {contest.hostEmail}
@@ -238,7 +238,7 @@ export default function ContestPage() {
                   <span className="text-lg">{i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'}</span>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-purple-800 truncate">{entry.entryTitle}</p>
-                    <p className="text-xs text-purple-600">{entry.firstName}</p>
+                    <p className="text-xs text-gray-600">{entry.firstName}</p>
                   </div>
                   <span className="text-xs font-bold text-pink-500">❤️ {entry.voteCount}</span>
                 </div>

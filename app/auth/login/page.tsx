@@ -2,47 +2,23 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
-import { Star, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Star } from 'lucide-react';
 
 export default function LoginPage() {
-  const { signIn, signInWithGoogle } = useAuth();
+  const { signInWithGoogle } = useAuth();
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPw, setShowPw] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState('');
-
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    try {
-      await signIn(email, password);
-      router.push('/');
-    } catch (err: unknown) {
-      const msg = (err as { code?: string })?.code;
-      if (msg === 'auth/invalid-credential' || msg === 'auth/wrong-password' || msg === 'auth/user-not-found') {
-        setError('Invalid email or password.');
-      } else {
-        setError('Sign in failed. Please try again.');
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
 
   async function handleGoogle() {
     setGoogleLoading(true);
     setError('');
     try {
       await signInWithGoogle();
-      router.push('/');
+      router.push('/setup');
     } catch {
-      setError('Google sign in failed.');
+      setError('Google sign in failed. Please try again.');
     } finally {
       setGoogleLoading(false);
     }
@@ -51,21 +27,17 @@ export default function LoginPage() {
   return (
     <div className="min-h-[calc(100vh-5rem)] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
-        <div className="glass rounded-3xl p-8 glow-lavender">
-          {/* Logo */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 mb-4 shadow-lg animate-float">
-              <Star className="w-7 h-7 text-white fill-white" />
-            </div>
-            <h1 className="text-2xl font-extrabold gradient-text">Welcome back</h1>
-            <p className="text-purple-600 text-sm mt-1">Sign in to continue to Spotlightly</p>
+        <div className="glass rounded-3xl p-8 glow-lavender text-center">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 mb-4 shadow-lg animate-float">
+            <Star className="w-7 h-7 text-white fill-white" />
           </div>
+          <h1 className="text-2xl font-extrabold gradient-text">Welcome to Spotlightly</h1>
+          <p className="text-gray-600 text-sm mt-1 mb-8">Sign in with Google to continue</p>
 
-          {/* Google */}
           <button
             onClick={handleGoogle}
             disabled={googleLoading}
-            className="w-full flex items-center justify-center gap-3 glass border-2 border-purple-100 rounded-2xl py-3 mb-4 hover:border-purple-300 transition-all font-medium text-purple-700"
+            className="w-full flex items-center justify-center gap-3 glass border-2 border-purple-100 rounded-2xl py-3.5 hover:border-purple-300 transition-all font-medium text-gray-800"
           >
             {googleLoading ? (
               <div className="w-5 h-5 border-2 border-purple-300 border-t-purple-600 rounded-full animate-spin" />
@@ -80,49 +52,10 @@ export default function LoginPage() {
             Continue with Google
           </button>
 
-          <div className="flex items-center gap-3 mb-4">
-            <div className="flex-1 h-px bg-purple-100" />
-            <span className="text-xs text-purple-300">or</span>
-            <div className="flex-1 h-px bg-purple-100" />
-          </div>
+          {error && <p className="text-sm text-red-500 mt-4">{error}</p>}
 
-          {/* Form */}
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-purple-700 mb-2">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-600" />
-                <input
-                  type="email" required value={email} onChange={e => setEmail(e.target.value)}
-                  className="input-dreamy pl-10" placeholder="you@example.com"
-                />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-purple-700 mb-2">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-600" />
-                <input
-                  type={showPw ? 'text' : 'password'} required value={password} onChange={e => setPassword(e.target.value)}
-                  className="input-dreamy pl-10 pr-10" placeholder="••••••••"
-                />
-                <button type="button" onClick={() => setShowPw(!showPw)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-purple-600 hover:text-purple-600">
-                  {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
-
-            {error && <p className="text-sm text-red-500 text-center">{error}</p>}
-
-            <button type="submit" disabled={loading} className="btn-primary w-full justify-center py-3.5">
-              {loading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'Sign In'}
-            </button>
-          </form>
-
-          <p className="text-center text-sm text-purple-600 mt-6">
-            Don't have an account?{' '}
-            <Link href="/auth/signup" className="text-purple-600 font-semibold hover:underline">Sign up</Link>
+          <p className="text-xs text-gray-500 mt-6">
+            By continuing, you agree to our Terms of Service and Privacy Policy.
           </p>
         </div>
       </div>

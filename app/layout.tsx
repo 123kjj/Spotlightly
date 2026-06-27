@@ -5,6 +5,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import StarField from '@/components/ui/StarField';
 import CookieBanner from '@/components/layout/CookieBanner';
+import OnboardingGuard from '@/components/layout/OnboardingGuard';
 
 export const metadata: Metadata = {
   title: 'Spotlightly – Where Creativity Takes Center Stage',
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
         <AuthProvider>
           <StarField />
+          <OnboardingGuard />
           <div className="relative z-10 flex flex-col min-h-screen">
             <Navbar />
             <main className="flex-1 pt-20">

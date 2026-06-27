@@ -35,7 +35,7 @@ export default function ProfilePage() {
             </div>
           )}
           <h1 className="text-2xl font-extrabold gradient-text">{user.displayName ?? 'Creator'}</h1>
-          <p className="text-purple-600 text-sm mt-1 flex items-center gap-1">
+          <p className="text-gray-700 text-sm mt-1 flex items-center gap-1">
             <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" /> Spotlightly Member
           </p>
         </div>
@@ -45,21 +45,21 @@ export default function ProfilePage() {
           <div className="flex items-center gap-3 p-4 rounded-2xl bg-purple-50/50">
             <User className="w-5 h-5 text-purple-600" />
             <div>
-              <p className="text-xs text-purple-600">Display Name</p>
+              <p className="text-xs text-gray-600">Display Name</p>
               <p className="text-sm font-semibold text-purple-900">{user.displayName ?? 'Not set'}</p>
             </div>
           </div>
           <div className="flex items-center gap-3 p-4 rounded-2xl bg-purple-50/50">
             <Mail className="w-5 h-5 text-purple-600" />
             <div>
-              <p className="text-xs text-purple-600">Email</p>
+              <p className="text-xs text-gray-600">Email</p>
               <p className="text-sm font-semibold text-purple-900">{user.email}</p>
             </div>
           </div>
           <div className="flex items-center gap-3 p-4 rounded-2xl bg-purple-50/50">
             <Calendar className="w-5 h-5 text-purple-600" />
             <div>
-              <p className="text-xs text-purple-600">User ID</p>
+              <p className="text-xs text-gray-600">User ID</p>
               <p className="text-sm font-mono text-purple-700 truncate">{user.uid}</p>
             </div>
           </div>

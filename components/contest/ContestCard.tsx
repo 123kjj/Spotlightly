@@ -22,8 +22,16 @@ export default function ContestCard({ contest }: Props) {
 
   const status = statusConfig[contest.status];
 
+  // Clicking anywhere on the card goes to the same place as the visible button below.
+  // For ended contests that's the Winners page; otherwise the contest detail page.
+  const destination = isEnded ? `/contest/${contest.id}/winners` : `/contest/${contest.id}`;
+
   return (
-    <div className="contest-card glass rounded-3xl overflow-hidden group cursor-pointer" style={{ boxShadow: '0 4px 24px rgba(124,58,237,0.1)' }}>
+    <Link
+      href={destination}
+      className="contest-card glass rounded-3xl overflow-hidden group cursor-pointer block"
+      style={{ boxShadow: '0 4px 24px rgba(124,58,237,0.1)' }}
+    >
       {/* Banner */}
       <div className="relative h-48 overflow-hidden bg-gradient-to-br from-purple-200 via-pink-100 to-blue-200 flex items-center justify-center">
         <span className="text-7xl group-hover:scale-110 transition-transform duration-500 drop-shadow-sm">
@@ -52,11 +60,11 @@ export default function ContestCard({ contest }: Props) {
         <h3 className="font-bold text-lg text-purple-900 mb-2 line-clamp-1 group-hover:gradient-text transition-all">
           {contest.title}
         </h3>
-        <p className="text-sm text-purple-600 line-clamp-2 mb-4 leading-relaxed">
+        <p className="text-sm text-gray-700 line-clamp-2 mb-4 leading-relaxed">
           {contest.description}
         </p>
 
-        <div className="flex items-center gap-2 text-xs text-purple-600 mb-4">
+        <div className="flex items-center gap-2 text-xs text-gray-600 mb-4">
           <Calendar className="w-3.5 h-3.5" />
           <span>
             {isEnded
@@ -67,22 +75,28 @@ export default function ContestCard({ contest }: Props) {
           </span>
         </div>
 
+        {/*
+          These look like buttons but are spans, not nested links — the whole
+          card above is already the clickable <Link>. A nested <a> inside an
+          <a> is invalid HTML and breaks click-through, so the visible
+          "buttons" below just mirror the card's destination visually.
+        */}
         {isActive && (
-          <Link href={`/contest/${contest.id}`} className="btn-primary text-sm py-2.5 w-full justify-center">
+          <span className="btn-primary text-sm py-2.5 w-full justify-center pointer-events-none">
             Enter Contest <ArrowRight className="w-4 h-4" />
-          </Link>
+          </span>
         )}
         {isEnded && (
-          <Link href={`/contest/${contest.id}/winners`} className="btn-secondary text-sm py-2.5 w-full justify-center">
-            <Trophy className="w-4 h-4" /> View Winners
-          </Link>
+          <span className="btn-secondary text-sm py-2.5 w-full justify-center pointer-events-none">
+            <Trophy className="w-4 h-4" /> See Winners
+          </span>
         )}
         {isUpcoming && (
-          <Link href={`/contest/${contest.id}`} className="btn-secondary text-sm py-2.5 w-full justify-center">
+          <span className="btn-secondary text-sm py-2.5 w-full justify-center pointer-events-none">
             Learn More <ArrowRight className="w-4 h-4" />
-          </Link>
+          </span>
         )}
       </div>
-    </div>
+    </Link>
   );
 }

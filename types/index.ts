@@ -33,6 +33,10 @@ export interface User {
   displayName: string | null;
   photoURL: string | null;
   isAdmin?: boolean;
+  firstName?: string;
+  age?: number;
+  onboardingComplete?: boolean;
+  agreedGuardianPermission?: boolean;
   createdAt: Date;
 }
 

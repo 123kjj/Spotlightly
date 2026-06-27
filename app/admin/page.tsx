@@ -113,7 +113,7 @@ export default function AdminPage() {
         </div>
         <div>
           <h1 className="text-2xl font-extrabold gradient-text">Admin Dashboard</h1>
-          <p className="text-purple-600 text-sm">Moderate entries and manage reports</p>
+          <p className="text-gray-700 text-sm">Moderate entries and manage reports</p>
         </div>
       </div>
 
@@ -149,7 +149,7 @@ export default function AdminPage() {
             <div className="glass rounded-3xl p-12 text-center">
               <div className="text-4xl mb-3">✅</div>
               <p className="font-semibold text-purple-900">All caught up!</p>
-              <p className="text-purple-600 text-sm">No pending submissions.</p>
+              <p className="text-gray-700 text-sm">No pending submissions.</p>
             </div>
           ) : pending.map(entry => (
             <div key={entry.id} className="glass rounded-3xl p-5">
@@ -164,15 +164,15 @@ export default function AdminPage() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <h3 className="font-bold text-purple-900 text-lg">{entry.entryTitle}</h3>
-                      <p className="text-sm text-purple-700 mt-0.5">
+                      <p className="text-sm text-gray-700 mt-0.5">
                         {entry.fullName} · Age {entry.age} · {entry.email}
                       </p>
-                      <p className="text-xs text-purple-300 mt-1">
+                      <p className="text-xs text-gray-500 mt-1">
                         Contest: <Link href={`/contest/${entry.contestId}`} className="hover:underline">{entry.contestId}</Link>
                         {' · '}Submitted {format(entry.createdAt, 'MMM d, yyyy')}
                       </p>
                       {entry.description && (
-                        <p className="text-sm text-purple-600 mt-2 line-clamp-2">{entry.description}</p>
+                        <p className="text-sm text-gray-700 mt-2 line-clamp-2">{entry.description}</p>
                       )}
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
@@ -209,7 +209,7 @@ export default function AdminPage() {
             <div className="glass rounded-3xl p-12 text-center">
               <div className="text-4xl mb-3">📋</div>
               <p className="font-semibold text-purple-900">Nothing reviewed yet</p>
-              <p className="text-purple-600 text-sm">Approved and rejected entries will show up here.</p>
+              <p className="text-gray-700 text-sm">Approved and rejected entries will show up here.</p>
             </div>
           ) : reviewed.map(entry => (
             <div key={entry.id} className="glass rounded-3xl p-5">
@@ -234,11 +234,11 @@ export default function AdminPage() {
                           </span>
                         )}
                         {entry.reviewedAt && (
-                          <span className="text-xs text-purple-300">{format(entry.reviewedAt, 'MMM d, yyyy h:mm a')}</span>
+                          <span className="text-xs text-gray-500">{format(entry.reviewedAt, 'MMM d, yyyy h:mm a')}</span>
                         )}
                       </div>
                       <h3 className="font-bold text-purple-900 text-lg">{entry.entryTitle}</h3>
-                      <p className="text-sm text-purple-700 mt-0.5">
+                      <p className="text-sm text-gray-700 mt-0.5">
                         {entry.fullName} · Age {entry.age} · {entry.email}
                       </p>
                       {entry.status === 'rejected' && entry.rejectionReason && (
@@ -276,7 +276,7 @@ export default function AdminPage() {
             <div className="glass rounded-3xl p-12 text-center">
               <div className="text-4xl mb-3">🕊️</div>
               <p className="font-semibold text-purple-900">No reports</p>
-              <p className="text-purple-600 text-sm">Everything looks clean!</p>
+              <p className="text-gray-700 text-sm">Everything looks clean!</p>
             </div>
           ) : reports.map(report => (
             <div key={report.id} className="glass rounded-3xl p-5">
@@ -291,13 +291,13 @@ export default function AdminPage() {
                       {report.status}
                     </span>
                   </div>
-                  <p className="text-sm text-purple-700">
+                  <p className="text-sm text-gray-700">
                     Entry: <Link href={`/contest/${report.contestId}#entry-${report.entryId}`} className="hover:underline text-purple-700">
                       View Entry
                     </Link>
                   </p>
-                  {report.details && <p className="text-sm text-purple-700 mt-1">"{report.details}"</p>}
-                  <p className="text-xs text-purple-300 mt-1">{format(report.createdAt, 'MMM d, yyyy h:mm a')}</p>
+                  {report.details && <p className="text-sm text-gray-700 mt-1">"{report.details}"</p>}
+                  <p className="text-xs text-gray-500 mt-1">{format(report.createdAt, 'MMM d, yyyy h:mm a')}</p>
                 </div>
               </div>
             </div>

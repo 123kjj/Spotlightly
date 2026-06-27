@@ -86,7 +86,7 @@ export default function SubmitEntryPage() {
       <div className="max-w-lg mx-auto px-4 py-24 text-center">
         <div className="text-6xl mb-4 animate-float">🔒</div>
         <h2 className="text-2xl font-bold text-purple-900 mb-3">Sign in required</h2>
-        <p className="text-purple-700 mb-6">You need to be signed in to submit an entry.</p>
+        <p className="text-gray-700 mb-6">You need to be signed in to submit an entry.</p>
         <Link href="/auth/login" className="btn-primary">Sign In</Link>
       </div>
     );
@@ -97,8 +97,8 @@ export default function SubmitEntryPage() {
       <div className="max-w-lg mx-auto px-4 py-24 text-center">
         <div className="text-7xl mb-4 animate-float">🌟</div>
         <h2 className="text-3xl font-extrabold gradient-text mb-3">Entry Submitted!</h2>
-        <p className="text-purple-600 mb-2">Your entry is now <strong>pending review</strong>.</p>
-        <p className="text-sm text-purple-600 mb-8">Once approved by an admin, it will appear publicly in the contest.</p>
+        <p className="text-gray-700 mb-2">Your entry is now <strong>pending review</strong>.</p>
+        <p className="text-sm text-gray-600 mb-8">Once approved by an admin, it will appear publicly in the contest.</p>
         <Link href={`/contest/${contestId}`} className="btn-primary">
           View Contest
         </Link>
@@ -113,7 +113,7 @@ export default function SubmitEntryPage() {
           <Video className="w-8 h-8 text-white" />
         </div>
         <h1 className="text-3xl font-extrabold gradient-text mb-2">Submit Your Entry</h1>
-        <p className="text-purple-700">Share your YouTube video and enter the competition ✨</p>
+        <p className="text-gray-700">Share your YouTube video and enter the competition ✨</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -199,7 +199,7 @@ export default function SubmitEntryPage() {
           <h2 className="font-bold text-purple-900 flex items-center gap-2 mb-3">
             <Shield className="w-4 h-4 text-purple-600" /> Waiver & Agreement
           </h2>
-          <div className="bg-purple-50/50 rounded-2xl p-4 text-sm text-purple-600 leading-relaxed mb-4">
+          <div className="bg-purple-50/50 rounded-2xl p-4 text-sm text-gray-700 leading-relaxed mb-4">
             {WAIVER_TEXT}
           </div>
           <label className="flex items-start gap-3 cursor-pointer group">
@@ -209,7 +209,7 @@ export default function SubmitEntryPage() {
               onChange={e => setWaiverAccepted(e.target.checked)}
               className="mt-1 accent-purple-600 w-4 h-4"
             />
-            <span className="text-sm text-purple-700 group-hover:text-purple-900 transition-colors">
+            <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors">
               I have read and agree to the above waiver and terms.
             </span>
           </label>

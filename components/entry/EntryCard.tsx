@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Entry } from '@/types';
-import { Heart, Share2, Flag, ExternalLink } from 'lucide-react';
+import { Share2, Flag, ExternalLink, ThumbsUp, Check } from 'lucide-react';
 import { voteForEntry, removeVote, reportEntry } from '@/lib/firestore';
 import { useAuth } from '@/lib/auth-context';
 import ReportModal from './ReportModal';
@@ -100,7 +100,7 @@ export default function EntryCard({ entry, contestId, hasVoted, onVoteChange, ra
         {/* Info */}
         <div className="p-4">
           <h3 className="font-bold text-purple-900 text-sm mb-1 line-clamp-2">{entry.entryTitle}</h3>
-          <p className="text-xs text-purple-700 mb-3">
+          <p className="text-xs text-gray-600 mb-3">
             {entry.firstName} · Age {entry.age}
           </p>
 
@@ -110,14 +110,15 @@ export default function EntryCard({ entry, contestId, hasVoted, onVoteChange, ra
             <button
               onClick={handleVote}
               disabled={voteLoading}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-semibold transition-all disabled:opacity-60 ${
                 voted
-                  ? 'bg-pink-100 text-pink-600 hover:bg-pink-200'
-                  : 'bg-gray-50 text-gray-500 hover:bg-pink-50 hover:text-pink-500'
+                  ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                  : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:shadow-md hover:scale-105'
               }`}
             >
-              <Heart className={`w-4 h-4 ${voted ? 'fill-pink-500' : ''}`} />
-              <span>{voteCount}</span>
+              {voted ? <Check className="w-4 h-4" /> : <ThumbsUp className="w-4 h-4" />}
+              <span>{voted ? 'Voted' : 'Vote'}</span>
+              <span className={voted ? 'text-green-600' : 'text-white/90'}>· {voteCount}</span>
             </button>
 
             <div className="flex items-center gap-1">

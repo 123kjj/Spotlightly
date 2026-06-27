@@ -104,9 +104,8 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Link href="/auth/login" className="btn-secondary text-sm py-2 px-5">Log In</Link>
-                <Link href="/auth/signup" className="btn-primary text-sm py-2 px-5">
-                  <Sparkles className="w-4 h-4" /> Sign Up
+                <Link href="/auth/login" className="btn-primary text-sm py-2 px-5">
+                  <Sparkles className="w-4 h-4" /> Sign In with Google
                 </Link>
               </div>
             )}
@@ -148,8 +147,7 @@ export default function Navbar() {
             </>
           ) : (
             <div className="flex gap-2 pt-2">
-              <Link href="/auth/login" onClick={() => setMobileOpen(false)} className="btn-secondary text-sm py-2 flex-1 justify-center">Log In</Link>
-              <Link href="/auth/signup" onClick={() => setMobileOpen(false)} className="btn-primary text-sm py-2 flex-1 justify-center">Sign Up</Link>
+              <Link href="/auth/login" onClick={() => setMobileOpen(false)} className="btn-primary text-sm py-2 flex-1 justify-center">Sign In with Google</Link>
             </div>
           )}
         </div>

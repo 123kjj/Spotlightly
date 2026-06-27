@@ -39,7 +39,7 @@ export default function BrowsePage() {
         <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
           <span className="gradient-text">Browse Contests</span>
         </h1>
-        <p className="text-purple-700 text-lg">Discover competitions and showcase your creativity</p>
+        <p className="text-gray-700 text-lg">Discover competitions and showcase your creativity</p>
       </div>
 
       {/* Search + Filter */}
@@ -81,11 +81,11 @@ export default function BrowsePage() {
         <div className="text-center py-24">
           <div className="text-6xl mb-4">🔍</div>
           <h3 className="text-xl font-bold text-purple-900 mb-2">No contests found</h3>
-          <p className="text-purple-700">Try adjusting your search or filter</p>
+          <p className="text-gray-700">Try adjusting your search or filter</p>
         </div>
       ) : (
         <>
-          <p className="text-sm text-purple-600 mb-6">{filtered.length} contest{filtered.length !== 1 ? 's' : ''} found</p>
+          <p className="text-sm text-gray-600 mb-6">{filtered.length} contest{filtered.length !== 1 ? 's' : ''} found</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((c, i) => (
               <div key={c.id} className="animate-rise-in" style={{ animationDelay: `${i * 0.05}s`, opacity: 0 }}>

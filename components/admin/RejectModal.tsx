@@ -53,7 +53,7 @@ export default function RejectModal({ entry, onClose, onConfirm }: Props) {
           </button>
         </div>
 
-        <p className="text-sm text-purple-600 mb-4">
+        <p className="text-sm text-gray-700 mb-4">
           Rejecting "<strong>{entry.entryTitle}</strong>" by {entry.fullName}. Select why this entry was declined:
         </p>
 

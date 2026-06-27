@@ -92,7 +92,7 @@ export default function CreateContestPage() {
       <div className="max-w-lg mx-auto px-4 py-24 text-center">
         <div className="text-6xl mb-4 animate-float">🔒</div>
         <h2 className="text-2xl font-bold text-purple-900 mb-3">Sign in required</h2>
-        <p className="text-purple-700 mb-6">You need to be signed in to create a contest.</p>
+        <p className="text-gray-700 mb-6">You need to be signed in to create a contest.</p>
         <Link href="/auth/login" className="btn-primary">Sign In</Link>
       </div>
     );
@@ -106,7 +106,7 @@ export default function CreateContestPage() {
           <Trophy className="w-8 h-8 text-white" />
         </div>
         <h1 className="text-3xl font-extrabold gradient-text mb-2">Create a Contest</h1>
-        <p className="text-purple-700">Set the stage for something magical ✨</p>
+        <p className="text-gray-700">Set the stage for something magical ✨</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -227,14 +227,11 @@ export default function CreateContestPage() {
           {form.rewardAvailable && (
             <div className="space-y-3 pt-2">
               <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-                <span className="text-base flex-shrink-0">⚠️</span>
+                <span className="text-base flex-shrink-0">✉️</span>
                 <p className="text-xs text-amber-800 leading-relaxed">
-                  As the contest creator, you are solely responsible for delivering this prize to the winner.
-                  Spotlightly does not sponsor, guarantee, or deliver prizes — see our{' '}
-                  <Link href="/terms" target="_blank" className="font-semibold underline hover:text-amber-900">
-                    Terms of Service
-                  </Link>{' '}
-                  for details.
+                  The email address associated with your Spotlightly account will be shared only with
+                  the winner of this contest if needed to ask questions about or claim the advertised
+                  prize.
                 </p>
               </div>
               <div>
@@ -252,8 +249,8 @@ export default function CreateContestPage() {
                 <textarea
                   value={form.rewardDescription}
                   onChange={e => update('rewardDescription', e.target.value)}
-                  className="input-dreamy h-20 resize-none"
-                  placeholder="Describe the reward in detail..."
+                  className="input-dreamy h-32 resize-y"
+                  placeholder={"Describe the reward in detail...\nPress Enter to start a new line."}
                 />
               </div>
               <div>
@@ -265,7 +262,7 @@ export default function CreateContestPage() {
                   className="input-dreamy"
                   placeholder="you@example.com"
                 />
-                <p className="text-xs text-purple-600 mt-1.5">
+                <p className="text-xs text-gray-600 mt-1.5">
                   This will be shown to winners so they know where to email to claim their reward.
                 </p>
               </div>

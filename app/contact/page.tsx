@@ -51,8 +51,11 @@ export default function ContactPage() {
 
       <div className="text-center mb-10">
         <div className="text-5xl mb-4 animate-float">💌</div>
-        <h1 className="text-4xl md:text-5xl font-extrabold gradient-text mb-3">Contact Us</h1>
-        <p className="text-purple-600">Have a question, concern, or report? We'd love to hear from you.</p>
+        <h1 className="text-4xl md:text-5xl font-extrabold gradient-text mb-3">Contact Us / Report an Issue</h1>
+        <p className="text-gray-700 max-w-lg mx-auto leading-relaxed">
+          Questions, feedback, bug reports, safety concerns, copyright issues, or general support —
+          we'd love to hear from you.
+        </p>
       </div>
 
       <div className="glass rounded-3xl p-6 sm:p-10 glow-lavender">
@@ -60,7 +63,7 @@ export default function ContactPage() {
           <div className="text-center py-10">
             <div className="text-6xl mb-4 animate-float">✨</div>
             <h2 className="text-2xl font-bold gradient-text mb-2">Message Sent!</h2>
-            <p className="text-purple-700 mb-6">Thanks for reaching out — we'll get back to you soon.</p>
+            <p className="text-gray-700 mb-6">Thanks for reaching out — we'll get back to you soon.</p>
             <button
               onClick={() => { setSubmitted(false); setForm({ name: '', email: '', subject: '', message: '' }); }}
               className="btn-secondary text-sm"

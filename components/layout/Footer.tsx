@@ -34,14 +34,17 @@ export default function Footer() {
               Community Guidelines
             </Link>
             <Link href="/contact" className="text-purple-700 hover:text-purple-800 transition-colors">
-              Contact Us
+              Contact Us / Report an Issue
             </Link>
           </nav>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-purple-100/50 text-center">
-          <p className="text-xs text-purple-300 flex items-center justify-center gap-1.5">
+        <div className="mt-8 pt-6 border-t border-purple-100/50 text-center space-y-1">
+          <p className="text-xs text-gray-500 flex items-center justify-center gap-1.5">
             ✨ &copy; {year} Spotlightly — Where Creativity Takes Center Stage ✨
+          </p>
+          <p className="text-xs text-gray-400">
+            Powered by Kritical Technolabs LLC
           </p>
         </div>
       </div>
