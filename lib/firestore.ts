@@ -41,6 +41,13 @@ export async function updateContestRules(id: string, rules: string) {
   await updateDoc(doc(db, 'contests', id), { rules });
 }
 
+export async function updateContestDates(id: string, startDate: Date, endDate: Date) {
+  await updateDoc(doc(db, 'contests', id), {
+    startDate: Timestamp.fromDate(startDate),
+    endDate: Timestamp.fromDate(endDate),
+  });
+}
+
 export async function getUserEmail(uid: string): Promise<string | null> {
   const snap = await getDoc(doc(db, 'users', uid));
   return snap.exists() ? (snap.data().email as string) ?? null : null;

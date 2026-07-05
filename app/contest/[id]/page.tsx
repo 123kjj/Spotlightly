@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getContest, getApprovedEntries, getUserVotes, deleteContest, updateContestDescription, updateContestRules } from '@/lib/firestore';
+import { getContest, getApprovedEntries, getUserVotes, deleteContest, updateContestDescription, updateContestRules, updateContestDates } from '@/lib/firestore';
 import { Contest, Entry } from '@/types';
 import { useAuth } from '@/lib/auth-context';
 import EntryCard from '@/components/entry/EntryCard';
@@ -26,6 +26,11 @@ export default function ContestPage() {
   const [editingRules, setEditingRules] = useState(false);
   const [rulesDraft, setRulesDraft] = useState('');
   const [savingRules, setSavingRules] = useState(false);
+  const [editingDates, setEditingDates] = useState(false);
+  const [startDraft, setStartDraft] = useState('');
+  const [endDraft, setEndDraft] = useState('');
+  const [savingDates, setSavingDates] = useState(false);
+  const [datesError, setDatesError] = useState('');
 
   const isOwner = user && contest && (user.uid === contest.createdBy || isAdmin);
 
@@ -72,6 +77,41 @@ export default function ContestPage() {
   function cancelEditRules() {
     setEditingRules(false);
     setRulesDraft('');
+  }
+
+  function toDatetimeLocal(date: Date): string {
+    const d = new Date(date);
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0, 16);
+  }
+
+  function startEditDates() {
+    if (!contest) return;
+    setStartDraft(toDatetimeLocal(contest.startDate));
+    setEndDraft(toDatetimeLocal(contest.endDate));
+    setDatesError('');
+    setEditingDates(true);
+  }
+
+  async function saveDates() {
+    if (!contest) return;
+    const start = new Date(startDraft);
+    const end = new Date(endDraft);
+    if (end <= start) {
+      setDatesError('End date must be after start date.');
+      return;
+    }
+    setSavingDates(true);
+    setDatesError('');
+    await updateContestDates(id, start, end);
+    setContest(c => c ? { ...c, startDate: start, endDate: end } : c);
+    setEditingDates(false);
+    setSavingDates(false);
+  }
+
+  function cancelEditDates() {
+    setEditingDates(false);
+    setDatesError('');
   }
 
   useEffect(() => {
@@ -320,19 +360,73 @@ export default function ContestPage() {
 
           {/* Dates */}
           <div className="glass rounded-3xl p-5">
-            <h3 className="font-bold text-purple-900 mb-3 flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-purple-600" /> Schedule
-            </h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-purple-600">Start</span>
-                <span className="text-purple-700 font-medium">{format(contest.startDate, 'MMM d, yyyy')}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-purple-600">End</span>
-                <span className="text-purple-700 font-medium">{format(contest.endDate, 'MMM d, yyyy')}</span>
-              </div>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-bold text-purple-900 flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-purple-600" /> Schedule
+              </h3>
+              {isOwner && !editingDates && (
+                <button
+                  onClick={startEditDates}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-purple-600 hover:bg-purple-50 border border-purple-200 transition-all"
+                >
+                  <Pencil className="w-3.5 h-3.5" /> Edit
+                </button>
+              )}
             </div>
+
+            {editingDates ? (
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs font-medium text-purple-700 mb-1.5">Start Date</label>
+                  <input
+                    type="datetime-local"
+                    value={startDraft}
+                    onChange={e => setStartDraft(e.target.value)}
+                    className="input-dreamy text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-purple-700 mb-1.5">End Date</label>
+                  <input
+                    type="datetime-local"
+                    value={endDraft}
+                    onChange={e => setEndDraft(e.target.value)}
+                    className="input-dreamy text-sm"
+                  />
+                </div>
+                {datesError && <p className="text-xs text-red-500">{datesError}</p>}
+                <div className="flex gap-2">
+                  <button
+                    onClick={cancelEditDates}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium glass border border-gray-200 text-gray-600 hover:bg-gray-50 transition-all"
+                  >
+                    <X className="w-3.5 h-3.5" /> Cancel
+                  </button>
+                  <button
+                    onClick={saveDates}
+                    disabled={savingDates}
+                    className="btn-primary text-sm py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {savingDates ? (
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <><Check className="w-3.5 h-3.5" /> Save</>
+                    )}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-purple-600">Start</span>
+                  <span className="text-purple-700 font-medium">{format(contest.startDate, 'MMM d, yyyy')}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-purple-600">End</span>
+                  <span className="text-purple-700 font-medium">{format(contest.endDate, 'MMM d, yyyy')}</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Reward */}
