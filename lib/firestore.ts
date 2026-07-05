@@ -33,6 +33,10 @@ export async function deleteContest(id: string) {
   await deleteDoc(doc(db, 'contests', id));
 }
 
+export async function updateContestDescription(id: string, description: string) {
+  await updateDoc(doc(db, 'contests', id), { description });
+}
+
 export async function getUserEmail(uid: string): Promise<string | null> {
   const snap = await getDoc(doc(db, 'users', uid));
   return snap.exists() ? (snap.data().email as string) ?? null : null;

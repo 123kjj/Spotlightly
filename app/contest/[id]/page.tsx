@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getContest, getApprovedEntries, getUserVotes, deleteContest } from '@/lib/firestore';
+import { getContest, getApprovedEntries, getUserVotes, deleteContest, updateContestDescription } from '@/lib/firestore';
 import { Contest, Entry } from '@/types';
 import { useAuth } from '@/lib/auth-context';
 import EntryCard from '@/components/entry/EntryCard';
-import { Calendar, Gift, Trophy, Share2, Plus, Users, Trash2 } from 'lucide-react';
+import { Calendar, Gift, Trophy, Share2, Plus, Users, Trash2, Pencil, Check, X } from 'lucide-react';
 import { format } from 'date-fns';
 
 export default function ContestPage() {
@@ -20,6 +20,9 @@ export default function ContestPage() {
   const [loading, setLoading] = useState(true);
   const [shareMsg, setShareMsg] = useState('');
   const [deleting, setDeleting] = useState(false);
+  const [editingDesc, setEditingDesc] = useState(false);
+  const [descDraft, setDescDraft] = useState('');
+  const [savingDesc, setSavingDesc] = useState(false);
 
   const isOwner = user && contest && (user.uid === contest.createdBy || isAdmin);
 
@@ -28,6 +31,25 @@ export default function ContestPage() {
     setDeleting(true);
     await deleteContest(id);
     router.push('/browse');
+  }
+
+  function startEditDesc() {
+    setDescDraft(contest?.description ?? '');
+    setEditingDesc(true);
+  }
+
+  async function saveDesc() {
+    if (!contest || !descDraft.trim()) return;
+    setSavingDesc(true);
+    await updateContestDescription(id, descDraft.trim());
+    setContest(c => c ? { ...c, description: descDraft.trim() } : c);
+    setEditingDesc(false);
+    setSavingDesc(false);
+  }
+
+  function cancelEditDesc() {
+    setEditingDesc(false);
+    setDescDraft('');
   }
 
   useEffect(() => {
@@ -96,8 +118,50 @@ export default function ContestPage() {
         <div className="lg:col-span-2 space-y-6">
           {/* Description */}
           <div className="glass rounded-3xl p-6">
-            <h2 className="font-bold text-purple-900 text-lg mb-3">About this Contest</h2>
-            <p className="text-gray-700 leading-relaxed">{contest.description}</p>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-bold text-purple-900 text-lg">About this Contest</h2>
+              {isOwner && !editingDesc && (
+                <button
+                  onClick={startEditDesc}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-purple-600 hover:bg-purple-50 border border-purple-200 transition-all"
+                >
+                  <Pencil className="w-3.5 h-3.5" /> Edit
+                </button>
+              )}
+            </div>
+
+            {editingDesc ? (
+              <div className="space-y-3">
+                <textarea
+                  value={descDraft}
+                  onChange={e => setDescDraft(e.target.value)}
+                  className="input-dreamy h-36 resize-y"
+                  placeholder="Describe your contest..."
+                  autoFocus
+                />
+                <div className="flex gap-2">
+                  <button
+                    onClick={cancelEditDesc}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium glass border border-gray-200 text-gray-600 hover:bg-gray-50 transition-all"
+                  >
+                    <X className="w-3.5 h-3.5" /> Cancel
+                  </button>
+                  <button
+                    onClick={saveDesc}
+                    disabled={savingDesc || !descDraft.trim()}
+                    className="btn-primary text-sm py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {savingDesc ? (
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <><Check className="w-3.5 h-3.5" /> Save</>
+                    )}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{contest.description}</p>
+            )}
           </div>
 
           {/* Rules */}
