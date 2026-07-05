@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getContest, getApprovedEntries, getUserVotes, deleteContest, updateContestDescription } from '@/lib/firestore';
+import { getContest, getApprovedEntries, getUserVotes, deleteContest, updateContestDescription, updateContestRules } from '@/lib/firestore';
 import { Contest, Entry } from '@/types';
 import { useAuth } from '@/lib/auth-context';
 import EntryCard from '@/components/entry/EntryCard';
@@ -23,6 +23,9 @@ export default function ContestPage() {
   const [editingDesc, setEditingDesc] = useState(false);
   const [descDraft, setDescDraft] = useState('');
   const [savingDesc, setSavingDesc] = useState(false);
+  const [editingRules, setEditingRules] = useState(false);
+  const [rulesDraft, setRulesDraft] = useState('');
+  const [savingRules, setSavingRules] = useState(false);
 
   const isOwner = user && contest && (user.uid === contest.createdBy || isAdmin);
 
@@ -50,6 +53,25 @@ export default function ContestPage() {
   function cancelEditDesc() {
     setEditingDesc(false);
     setDescDraft('');
+  }
+
+  function startEditRules() {
+    setRulesDraft(contest?.rules ?? '');
+    setEditingRules(true);
+  }
+
+  async function saveRules() {
+    if (!contest || !rulesDraft.trim()) return;
+    setSavingRules(true);
+    await updateContestRules(id, rulesDraft.trim());
+    setContest(c => c ? { ...c, rules: rulesDraft.trim() } : c);
+    setEditingRules(false);
+    setSavingRules(false);
+  }
+
+  function cancelEditRules() {
+    setEditingRules(false);
+    setRulesDraft('');
   }
 
   useEffect(() => {
@@ -166,8 +188,50 @@ export default function ContestPage() {
 
           {/* Rules */}
           <div className="glass rounded-3xl p-6">
-            <h2 className="font-bold text-purple-900 text-lg mb-3">📋 Rules</h2>
-            <div className="text-gray-700 leading-relaxed whitespace-pre-wrap text-sm">{contest.rules}</div>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-bold text-purple-900 text-lg">📋 Rules</h2>
+              {isOwner && !editingRules && (
+                <button
+                  onClick={startEditRules}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-purple-600 hover:bg-purple-50 border border-purple-200 transition-all"
+                >
+                  <Pencil className="w-3.5 h-3.5" /> Edit
+                </button>
+              )}
+            </div>
+
+            {editingRules ? (
+              <div className="space-y-3">
+                <textarea
+                  value={rulesDraft}
+                  onChange={e => setRulesDraft(e.target.value)}
+                  className="input-dreamy h-48 resize-y"
+                  placeholder="Enter the contest rules..."
+                  autoFocus
+                />
+                <div className="flex gap-2">
+                  <button
+                    onClick={cancelEditRules}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium glass border border-gray-200 text-gray-600 hover:bg-gray-50 transition-all"
+                  >
+                    <X className="w-3.5 h-3.5" /> Cancel
+                  </button>
+                  <button
+                    onClick={saveRules}
+                    disabled={savingRules || !rulesDraft.trim()}
+                    className="btn-primary text-sm py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {savingRules ? (
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <><Check className="w-3.5 h-3.5" /> Save</>
+                    )}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="text-gray-700 leading-relaxed whitespace-pre-wrap text-sm">{contest.rules}</div>
+            )}
           </div>
 
           {/* Entries */}
