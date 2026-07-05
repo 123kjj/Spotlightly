@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { submitEntry, validateYouTubeUrl } from '@/lib/firestore';
+import { submitEntry, validateVideoUrl, detectPlatform, VideoPlatform } from '@/lib/firestore';
 import { useAuth } from '@/lib/auth-context';
 import { Sparkles, Video, User, Shield, CheckCircle, AlertCircle, Loader } from 'lucide-react';
 import Link from 'next/link';
@@ -23,8 +23,9 @@ export default function SubmitEntryPage() {
     description: '',
   });
   const [waiverAccepted, setWaiverAccepted] = useState(false);
-  const [youtubeStatus, setYoutubeStatus] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
-  const [youtubeData, setYoutubeData] = useState<{ videoId: string; thumbnail: string; title: string } | null>(null);
+  const [videoStatus, setVideoStatus] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
+  const [videoData, setVideoData] = useState<{ videoId: string; thumbnail: string; title: string } | null>(null);
+  const [detectedPlatform, setDetectedPlatform] = useState<VideoPlatform | null>(null);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
@@ -33,17 +34,19 @@ export default function SubmitEntryPage() {
     setForm(f => ({ ...f, [field]: value }));
   }
 
-  async function checkYouTube(url: string) {
-    if (!url) { setYoutubeStatus('idle'); return; }
-    setYoutubeStatus('checking');
-    const result = await validateYouTubeUrl(url);
+  async function checkVideoUrl(url: string) {
+    if (!url) { setVideoStatus('idle'); setDetectedPlatform(null); return; }
+    const platform = detectPlatform(url);
+    setDetectedPlatform(platform);
+    setVideoStatus('checking');
+    const result = await validateVideoUrl(url);
     if (result.valid && result.videoId && result.thumbnail && result.title) {
-      setYoutubeStatus('valid');
-      setYoutubeData({ videoId: result.videoId, thumbnail: result.thumbnail, title: result.title });
+      setVideoStatus('valid');
+      setVideoData({ videoId: result.videoId, thumbnail: result.thumbnail, title: result.title });
       if (!form.entryTitle) update('entryTitle', result.title);
     } else {
-      setYoutubeStatus('invalid');
-      setYoutubeData(null);
+      setVideoStatus('invalid');
+      setVideoData(null);
     }
   }
 
@@ -51,7 +54,7 @@ export default function SubmitEntryPage() {
     e.preventDefault();
     if (!user) return;
     if (!waiverAccepted) { setError('Please accept the waiver to continue.'); return; }
-    if (youtubeStatus !== 'valid' || !youtubeData) { setError('Please enter a valid YouTube URL.'); return; }
+    if (videoStatus !== 'valid' || !videoData) { setError('Please enter a valid video URL.'); return; }
 
     setLoading(true);
     setError('');
@@ -64,9 +67,9 @@ export default function SubmitEntryPage() {
         email: form.email,
         entryTitle: form.entryTitle,
         youtubeUrl: form.youtubeUrl,
-        youtubeId: youtubeData.videoId,
-        thumbnailUrl: youtubeData.thumbnail,
-        videoTitle: youtubeData.title,
+        youtubeId: videoData.videoId,
+        thumbnailUrl: videoData.thumbnail,
+        videoTitle: videoData.title,
         description: form.description || undefined,
         waiverAccepted: true,
         waiverTimestamp: new Date(),
@@ -148,35 +151,52 @@ export default function SubmitEntryPage() {
           </h2>
 
           <div>
-            <label className="block text-sm font-medium text-purple-700 mb-2">YouTube URL *</label>
+            <label className="block text-sm font-medium text-purple-700 mb-2">Video URL *</label>
+            <p className="text-xs text-gray-500 mb-2">Paste a link from YouTube, TikTok, or Instagram</p>
             <div className="relative">
               <input
                 type="url"
                 required
                 value={form.youtubeUrl}
-                onChange={e => { update('youtubeUrl', e.target.value); setYoutubeStatus('idle'); }}
-                onBlur={e => checkYouTube(e.target.value)}
+                onChange={e => { update('youtubeUrl', e.target.value); setVideoStatus('idle'); setDetectedPlatform(null); }}
+                onBlur={e => checkVideoUrl(e.target.value)}
                 className="input-dreamy pr-10"
-                placeholder="https://www.youtube.com/watch?v=..."
+                placeholder="https://youtube.com/watch?v=...  or  tiktok.com/...  or  instagram.com/reel/..."
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                {youtubeStatus === 'checking' && <Loader className="w-4 h-4 text-purple-600 animate-spin" />}
-                {youtubeStatus === 'valid' && <CheckCircle className="w-4 h-4 text-green-500" />}
-                {youtubeStatus === 'invalid' && <AlertCircle className="w-4 h-4 text-red-400" />}
+                {videoStatus === 'checking' && <Loader className="w-4 h-4 text-purple-600 animate-spin" />}
+                {videoStatus === 'valid' && <CheckCircle className="w-4 h-4 text-green-500" />}
+                {videoStatus === 'invalid' && <AlertCircle className="w-4 h-4 text-red-400" />}
               </div>
             </div>
-            {youtubeStatus === 'invalid' && (
-              <p className="text-xs text-red-500 mt-1">⚠️ Could not validate this URL. Make sure the video is public and the URL is correct.</p>
+
+            {/* Platform badges */}
+            <div className="flex gap-2 mt-2">
+              {(['youtube', 'tiktok', 'instagram'] as const).map(p => (
+                <span key={p} className={`text-xs px-2.5 py-1 rounded-full font-medium transition-all ${
+                  detectedPlatform === p
+                    ? 'bg-purple-600 text-white'
+                    : 'bg-gray-100 text-gray-400'
+                }`}>
+                  {p === 'youtube' ? '▶ YouTube' : p === 'tiktok' ? '♪ TikTok' : '◎ Instagram'}
+                </span>
+              ))}
+            </div>
+
+            {videoStatus === 'invalid' && (
+              <p className="text-xs text-red-500 mt-1">⚠️ Could not validate this URL. Make sure the video is public and the link is correct.</p>
             )}
           </div>
 
           {/* Video preview */}
-          {youtubeStatus === 'valid' && youtubeData && (
+          {videoStatus === 'valid' && videoData && (
             <div className="flex gap-3 p-3 rounded-2xl bg-green-50/50 border border-green-200">
-              <img src={youtubeData.thumbnail} alt="" className="w-24 h-16 rounded-xl object-cover" />
+              <img src={videoData.thumbnail} alt="" className="w-24 h-16 rounded-xl object-cover" />
               <div>
-                <p className="text-xs text-green-600 font-medium">✓ Video verified</p>
-                <p className="text-sm text-purple-800 font-semibold line-clamp-2 mt-1">{youtubeData.title}</p>
+                <p className="text-xs text-green-600 font-medium">✓ Video verified
+                  {detectedPlatform && <span className="ml-1 capitalize text-gray-500">({detectedPlatform})</span>}
+                </p>
+                <p className="text-sm text-purple-800 font-semibold line-clamp-2 mt-1">{videoData.title}</p>
               </div>
             </div>
           )}
@@ -223,7 +243,7 @@ export default function SubmitEntryPage() {
 
         <button
           type="submit"
-          disabled={loading || !waiverAccepted || youtubeStatus !== 'valid'}
+          disabled={loading || !waiverAccepted || videoStatus !== 'valid'}
           className="btn-primary w-full justify-center py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (

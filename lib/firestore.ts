@@ -260,7 +260,24 @@ export async function submitContactMessage(data: {
   });
 }
 
-// ── YouTube ───────────────────────────────────────────────────────────────────
+// ── Video URL Validation (YouTube, TikTok, Instagram) ──────────────────────
+
+export type VideoPlatform = 'youtube' | 'tiktok' | 'instagram';
+
+export interface VideoData {
+  valid: boolean;
+  platform?: VideoPlatform;
+  videoId?: string;
+  thumbnail?: string;
+  title?: string;
+}
+
+export function detectPlatform(url: string): VideoPlatform | null {
+  if (/youtube\.com|youtu\.be/.test(url)) return 'youtube';
+  if (/tiktok\.com/.test(url)) return 'tiktok';
+  if (/instagram\.com/.test(url)) return 'instagram';
+  return null;
+}
 
 export function extractYouTubeId(url: string): string | null {
   const patterns = [
@@ -278,22 +295,72 @@ export function getYouTubeThumbnail(videoId: string): string {
   return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 }
 
-export async function validateYouTubeUrl(url: string): Promise<{ valid: boolean; videoId?: string; thumbnail?: string; title?: string }> {
-  const videoId = extractYouTubeId(url);
-  if (!videoId) return { valid: false };
+export async function validateVideoUrl(url: string): Promise<VideoData> {
+  const platform = detectPlatform(url);
+  if (!platform) return { valid: false };
 
-  // Try to fetch the oEmbed data to check if video exists
   try {
-    const res = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
-    if (!res.ok) return { valid: false };
-    const data = await res.json();
-    return {
-      valid: true,
-      videoId,
-      thumbnail: getYouTubeThumbnail(videoId),
-      title: data.title,
-    };
+    if (platform === 'youtube') {
+      const videoId = extractYouTubeId(url);
+      if (!videoId) return { valid: false };
+      const res = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
+      if (!res.ok) return { valid: false };
+      const data = await res.json();
+      return {
+        valid: true,
+        platform,
+        videoId,
+        thumbnail: getYouTubeThumbnail(videoId),
+        title: data.title,
+      };
+    }
+
+    if (platform === 'tiktok') {
+      const res = await fetch(`https://www.tiktok.com/oembed?url=${encodeURIComponent(url)}`);
+      if (!res.ok) return { valid: false };
+      const data = await res.json();
+      return {
+        valid: true,
+        platform,
+        videoId: url, // TikTok doesn't expose a simple numeric ID publicly
+        thumbnail: data.thumbnail_url ?? `https://placehold.co/480x270/c4b5fd/7c3aed?text=TikTok`,
+        title: data.title ?? 'TikTok Video',
+      };
+    }
+
+    if (platform === 'instagram') {
+      const igPattern = /instagram\.com\/(p|reel|tv)\/([A-Za-z0-9_-]+)/;
+      const match = url.match(igPattern);
+      if (!match) return { valid: false };
+      return {
+        valid: true,
+        platform,
+        videoId: match[2],
+        thumbnail: 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+          <svg xmlns="http://www.w3.org/2000/svg" width="480" height="270" viewBox="0 0 480 270">
+            <defs>
+              <linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#f09433"/>
+                <stop offset="25%" style="stop-color:#e6683c"/>
+                <stop offset="50%" style="stop-color:#dc2743"/>
+                <stop offset="75%" style="stop-color:#cc2366"/>
+                <stop offset="100%" style="stop-color:#bc1888"/>
+              </linearGradient>
+            </defs>
+            <rect width="480" height="270" fill="url(#ig)" rx="12"/>
+            <text x="240" y="155" font-size="80" text-anchor="middle" dominant-baseline="middle">📸</text>
+            <text x="240" y="220" font-size="18" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="system-ui">Instagram Video</text>
+          </svg>
+        `),
+        title: 'Instagram Video',
+      };
+    }
+
+    return { valid: false };
   } catch {
     return { valid: false };
   }
 }
+
+// Keep old name as alias so existing code doesn't break
+export const validateYouTubeUrl = validateVideoUrl;
