@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer';
 import StarField from '@/components/ui/StarField';
 import CookieBanner from '@/components/layout/CookieBanner';
 import OnboardingGuard from '@/components/layout/OnboardingGuard';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 export const metadata: Metadata = {
   title: 'Spotlightly – Where Creativity Takes Center Stage',
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <CookieBanner />
         </AuthProvider>
       </body>
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID!} />
     </html>
   );
 }
