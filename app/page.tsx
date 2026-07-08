@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { getContests } from '@/lib/firestore';
 import { Contest } from '@/types';
 import ContestCard from '@/components/contest/ContestCard';
+import FlyerCarousel from '@/components/flyer/FlyerCarousel';
 import { Sparkles, Trophy, Zap, ArrowRight } from 'lucide-react';
 
 export default function HomePage() {
@@ -18,7 +19,8 @@ export default function HomePage() {
   return (
     <div className="relative">
       {/* Hero */}
-      <section className="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden">
+      <section className="relative min-h-[85vh] flex items-center justify-center px-4" style={{ overflow: 'visible' }}>
+        {/* Background orbs */}
         <div className="absolute top-20 left-10 w-72 h-72 rounded-full opacity-20 animate-float-slow"
           style={{ background: 'radial-gradient(circle, #c4b5fd, transparent)' }} />
         <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full opacity-15 animate-float"
@@ -26,7 +28,11 @@ export default function HomePage() {
         <div className="absolute top-40 right-32 w-48 h-48 rounded-full opacity-20 animate-float-slow"
           style={{ background: 'radial-gradient(circle, #bae6fd, transparent)', animationDelay: '1s' }} />
 
-        <div className="relative z-10 text-center max-w-4xl mx-auto">
+        {/* Floating contest flyers */}
+        <FlyerCarousel />
+
+        {/* Hero content — must stay above flyers */}
+        <div className="relative z-10 text-center max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-2 glass px-5 py-2 rounded-full mb-8 glow-lavender">
             <Sparkles className="w-4 h-4 text-yellow-400 animate-sparkle" />
             <span className="text-sm font-medium text-purple-700">Where every creator shines</span>
@@ -68,6 +74,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Contests Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
         <div className="flex items-center justify-between mb-10">
           <div>

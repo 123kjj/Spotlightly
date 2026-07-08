@@ -27,6 +27,16 @@ export const REJECTION_REASON_LABELS: Record<RejectionReason, string> = {
   other: 'Other',
 };
 
+export interface Flyer {
+  id: string;
+  contestId: string;
+  creatorUid: string;
+  imageUrl: string;
+  flyerTitle?: string;
+  description?: string;
+  createdAt: Date;
+}
+
 export interface User {
   uid: string;
   email: string | null;

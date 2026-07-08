@@ -6,6 +6,7 @@ import { createContest } from '@/lib/firestore';
 import { useAuth } from '@/lib/auth-context';
 import { Sparkles, Trophy, Calendar, Gift, FileText, Image } from 'lucide-react';
 import Link from 'next/link';
+import CreateFlyerPrompt from '@/components/flyer/CreateFlyerPrompt';
 
 const BANNER_EMOJIS = [
   '🏆', '🎬', '🎤', '🎨', '🎭', '🎵', '🎸', '⭐',
@@ -18,6 +19,7 @@ export default function CreateContestPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [createdContest, setCreatedContest] = useState<{ id: string; title: string } | null>(null);
 
   const [form, setForm] = useState({
     title: '',
@@ -78,7 +80,8 @@ export default function CreateContestPage() {
         hostEmail: form.rewardAvailable ? form.hostEmail.trim() : undefined,
         createdBy: user.uid,
       });
-      router.push(`/contest/${id}`);
+      router.prefetch(`/contest/${id}`);
+      setCreatedContest({ id, title: form.title });
     } catch (err: unknown) {
       console.error('Create contest error:', err);
       const msg = (err as { message?: string })?.message ?? String(err);
@@ -305,6 +308,15 @@ export default function CreateContestPage() {
           )}
         </button>
       </form>
+
+      {/* Post-creation flyer prompt */}
+      {createdContest && (
+        <CreateFlyerPrompt
+          contestId={createdContest.id}
+          contestTitle={createdContest.title}
+          onClose={() => router.push(`/contest/${createdContest.id}`)}
+        />
+      )}
     </div>
   );
 }
