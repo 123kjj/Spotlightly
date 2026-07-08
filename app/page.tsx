@@ -56,6 +56,9 @@ export default function HomePage() {
             <Link href="/browse" className="btn-secondary text-base px-8 py-4">
               <Trophy className="w-5 h-5" /> Browse Contests
             </Link>
+            <Link href="/create-flyer" className="btn-secondary text-base px-8 py-4">
+              📄 Create Flyer
+            </Link>
           </div>
 
           <div className="flex flex-wrap justify-center gap-8 mt-16">

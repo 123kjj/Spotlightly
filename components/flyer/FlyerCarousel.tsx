@@ -47,13 +47,13 @@ export default function FlyerCarousel() {
       // Only show flyers whose contest is active or upcoming
       const enriched = await Promise.all(
         raw.map(async flyer => {
-          const contest = await getContest(flyer.contestId);
+          const contest = flyer.contestId ? await getContest(flyer.contestId) : null;
           return { ...flyer, contest: contest ?? undefined };
         })
       );
-      // Filter to active or upcoming contests only
+      // Filter: show flyers with no contest, or with active/upcoming contests
       const filtered = enriched.filter(f =>
-        f.contest && (f.contest.status === 'active' || f.contest.status === 'upcoming')
+        !f.contestId || !f.contest || f.contest.status === 'active' || f.contest.status === 'upcoming'
       );
       setFlyers(filtered.slice(0, 6));
     }
@@ -75,6 +75,7 @@ export default function FlyerCarousel() {
           <div
             key={flyer.id}
             onClick={() => {
+              if (!flyer.contestId) return;
               const dest = flyer.contest?.status === 'ended'
                 ? `/contest/${flyer.contestId}/winners`
                 : `/contest/${flyer.contestId}`;

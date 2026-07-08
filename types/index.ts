@@ -29,7 +29,7 @@ export const REJECTION_REASON_LABELS: Record<RejectionReason, string> = {
 
 export interface Flyer {
   id: string;
-  contestId: string;
+  contestId?: string;
   creatorUid: string;
   imageUrl: string;
   flyerTitle?: string;

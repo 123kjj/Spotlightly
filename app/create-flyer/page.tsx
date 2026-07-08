@@ -77,7 +77,7 @@ function CreateFlyerInner() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!user || !imageFile || !selectedContest) return;
+    if (!user || !imageFile) return;
     setUploading(true);
     setError('');
 
@@ -96,7 +96,7 @@ function CreateFlyerInner() {
       });
 
       await createFlyer({
-        contestId: selectedContest.id,
+        contestId: selectedContest?.id,
         creatorUid: user.uid,
         imageUrl,
         flyerTitle: flyerTitle.trim() || undefined,
@@ -200,7 +200,7 @@ function CreateFlyerInner() {
 
         {/* Choose Contest */}
         <div className="glass rounded-3xl p-6">
-          <h2 className="font-bold text-purple-900 mb-4">🏆 Choose Contest</h2>
+          <h2 className="font-bold text-purple-900 mb-4">🏆 Link to Contest <span className="text-gray-400 font-normal text-sm">(optional)</span></h2>
           <div className="relative">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-purple-400" />
             <input
@@ -276,7 +276,7 @@ function CreateFlyerInner() {
 
         <button
           type="submit"
-          disabled={uploading || !imageFile || !selectedContest}
+          disabled={uploading || !imageFile}
           className="btn-primary w-full justify-center py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {uploading ? (
