@@ -87,7 +87,15 @@ function CreateFlyerInner() {
     setError('');
 
     try {
+      const bucket = storage.app.options.storageBucket;
+      console.log('Storage bucket in use:', bucket);
+      console.log('User UID:', user.uid);
+      console.log('Env var:', process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
+
       const storageRef = ref(storage, `flyers/${user.uid}/${Date.now()}_${imageFile.name}`);
+      console.log('Upload path:', storageRef.fullPath);
+      console.log('Upload bucket:', storageRef.bucket);
+
       const uploadTask = uploadBytesResumable(storageRef, imageFile);
 
       const imageUrl = await new Promise<string>((resolve, reject) => {
@@ -108,7 +116,9 @@ function CreateFlyerInner() {
       setSubmitted(true);
     } catch (err: unknown) {
       console.error('Flyer upload error:', err);
-      setError('Upload failed. Please try again.');
+      const msg = (err as { message?: string; code?: string })?.message ?? String(err);
+      const code = (err as { code?: string })?.code ?? '';
+      setError(`Upload failed: ${code} — ${msg}`);
     } finally {
       setUploading(false);
     }

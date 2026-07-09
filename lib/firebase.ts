@@ -16,7 +16,14 @@ const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const storage = getStorage(app);
 export const googleProvider = new GoogleAuthProvider();
+
+// Initialize storage with explicit bucket URL to avoid env var timing issues
+export const storage = getStorage(
+  app,
+  process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    ? `gs://${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}`
+    : undefined
+);
 
 export default app;
