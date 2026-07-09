@@ -10,23 +10,21 @@ interface FlyerWithContest extends Flyer {
   contest?: Contest;
 }
 
-// Predefined positions around the hero — left column and right column,
-// carefully placed so they never overlap the centered hero content or navbar.
+// Predefined positions around the hero
 const POSITIONS = [
   // Left side
-  { top: '8%',  left: '1%',  rotate: -8,  delay: '0s',    duration: '5.5s' },
-  { top: '34%', left: '0%',  rotate: 5,   delay: '1.2s',  duration: '6.5s' },
-  { top: '62%', left: '2%',  rotate: -4,  delay: '0.4s',  duration: '5s'   },
+  { top: '8%',  left: '1%',  rotate: -8  },
+  { top: '38%', left: '0%',  rotate: 5   },
+  { top: '65%', left: '2%',  rotate: -4  },
   // Right side
-  { top: '6%',  right: '1%', rotate: 7,   delay: '0.8s',  duration: '6s'   },
-  { top: '36%', right: '0%', rotate: -6,  delay: '1.8s',  duration: '5.8s' },
-  { top: '64%', right: '2%', rotate: 4,   delay: '0.2s',  duration: '6.2s' },
+  { top: '6%',  right: '1%', rotate: 7   },
+  { top: '40%', right: '0%', rotate: -6  },
+  { top: '67%', right: '2%', rotate: 4   },
 ];
 
-// On mobile we only show 2 flyers (one per side, top only) to keep it clean
 const MOBILE_POSITIONS = [
-  { top: '6%', left: '0%',  rotate: -5, delay: '0s',   duration: '5.5s' },
-  { top: '6%', right: '0%', rotate: 5,  delay: '1s',   duration: '6s'   },
+  { top: '6%', left: '0%',  rotate: -5 },
+  { top: '6%', right: '0%', rotate: 5  },
 ];
 
 export default function FlyerCarousel() {
@@ -69,7 +67,7 @@ export default function FlyerCarousel() {
     <>
       {visibleFlyers.map((flyer, i) => {
         const pos = positions[i];
-        const { rotate, delay, duration, ...posStyles } = pos;
+        const { rotate, ...posStyles } = pos;
 
         return (
           <div
@@ -84,14 +82,9 @@ export default function FlyerCarousel() {
             className="absolute cursor-pointer group"
             style={{
               ...posStyles,
-              width: isMobile ? '80px' : '130px',
+              width: isMobile ? '90px' : '195px',
               transform: `rotate(${rotate}deg)`,
               zIndex: 5,
-              animationName: 'flyerFloat',
-              animationDuration: duration,
-              animationDelay: delay,
-              animationTimingFunction: 'ease-in-out',
-              animationIterationCount: 'infinite',
             }}
           >
             <div
@@ -135,12 +128,6 @@ export default function FlyerCarousel() {
         );
       })}
 
-      <style>{`
-        @keyframes flyerFloat {
-          0%, 100% { transform: translateY(0px) rotate(var(--r, 0deg)); }
-          50% { transform: translateY(-10px) rotate(calc(var(--r, 0deg) + 1.5deg)); }
-        }
-      `}</style>
     </>
   );
 }
