@@ -92,7 +92,13 @@ function CreateFlyerInner() {
       console.log('User UID:', user.uid);
       console.log('Env var:', process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
 
-      const storageRef = ref(storage, `flyers/${user.uid}/${Date.now()}_${imageFile.name}`);
+      // Sanitize filename — remove special chars that Firebase Storage rejects
+      const safeFileName = imageFile.name
+        .replace(/[^a-zA-Z0-9._-]/g, '_')
+        .replace(/_+/g, '_')
+        .slice(0, 80);
+
+      const storageRef = ref(storage, `flyers/${user.uid}/${Date.now()}_${safeFileName}`);
       console.log('Upload path:', storageRef.fullPath);
       console.log('Upload bucket:', storageRef.bucket);
 
