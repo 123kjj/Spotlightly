@@ -108,16 +108,28 @@ function CreateFlyerInner() {
         uploadTask.on(
           'state_changed',
           snap => setUploadProgress(Math.round((snap.bytesTransferred / snap.totalBytes) * 100)),
-          reject,
-          async () => resolve(await getDownloadURL(uploadTask.snapshot.ref))
+          err => { console.error('Upload task error:', err); reject(err); },
+          async () => {
+            try {
+              console.log('Upload complete, getting download URL...');
+              const url = await getDownloadURL(uploadTask.snapshot.ref);
+              console.log('Download URL:', url);
+              resolve(url);
+            } catch (urlErr) {
+              console.error('getDownloadURL error:', urlErr);
+              reject(urlErr);
+            }
+          }
         );
       });
 
+      console.log('Saving to Firestore...');
       await createFlyer({
         contestId: selectedContest.id,
         creatorUid: user.uid,
         imageUrl,
       });
+      console.log('Firestore save complete!');
 
       setSubmitted(true);
     } catch (err: unknown) {
