@@ -33,7 +33,6 @@ export default function Navbar() {
     { href: '/', label: 'Home' },
     { href: '/browse', label: 'Browse Contests' },
     { href: '/create', label: 'Create Contest' },
-    { href: '/create-flyer', label: '📄 Create Flyer' },
   ];
 
   return (

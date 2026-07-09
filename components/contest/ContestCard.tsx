@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Contest } from '@/types';
 import { Calendar, Trophy, ArrowRight, Crown } from 'lucide-react';
 import { format } from 'date-fns';
+import ContestBanner from './ContestBanner';
 
 interface Props {
   contest: Contest;
@@ -21,9 +22,6 @@ export default function ContestCard({ contest }: Props) {
   };
 
   const status = statusConfig[contest.status];
-
-  // Clicking anywhere on the card goes to the same place as the visible button below.
-  // For ended contests that's the Winners page; otherwise the contest detail page.
   const destination = isEnded ? `/contest/${contest.id}/winners` : `/contest/${contest.id}`;
 
   return (
@@ -33,23 +31,18 @@ export default function ContestCard({ contest }: Props) {
       style={{ boxShadow: '0 4px 24px rgba(124,58,237,0.1)' }}
     >
       {/* Banner */}
-      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-purple-200 via-pink-100 to-blue-200 flex items-center justify-center">
-        <span className="text-7xl group-hover:scale-110 transition-transform duration-500 drop-shadow-sm">
-          {contest.bannerEmoji ?? '🏆'}
-        </span>
-
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+      <div className="relative">
+        <ContestBanner contest={contest} height="h-48" />
 
         {/* Status badge */}
-        <div className={`absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${status.color} glass`}>
+        <div className={`absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${status.color} glass z-10`}>
           <div className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
           {status.label}
         </div>
 
         {/* Reward badge */}
         {contest.rewardAvailable && (
-          <div className="absolute top-3 left-3 flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 glass">
+          <div className="absolute top-3 right-20 flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 glass z-10">
             <Crown className="w-3 h-3" /> Reward
           </div>
         )}
@@ -75,12 +68,6 @@ export default function ContestCard({ contest }: Props) {
           </span>
         </div>
 
-        {/*
-          These look like buttons but are spans, not nested links — the whole
-          card above is already the clickable <Link>. A nested <a> inside an
-          <a> is invalid HTML and breaks click-through, so the visible
-          "buttons" below just mirror the card's destination visually.
-        */}
         {isActive && (
           <span className="btn-primary text-sm py-2.5 w-full justify-center pointer-events-none">
             Enter Contest <ArrowRight className="w-4 h-4" />

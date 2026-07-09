@@ -27,16 +27,6 @@ export const REJECTION_REASON_LABELS: Record<RejectionReason, string> = {
   other: 'Other',
 };
 
-export interface Flyer {
-  id: string;
-  contestId?: string;
-  creatorUid: string;
-  imageUrl: string;
-  flyerTitle?: string;
-  description?: string;
-  createdAt: Date;
-}
-
 export interface User {
   uid: string;
   email: string | null;
@@ -56,6 +46,11 @@ export interface Contest {
   description: string;
   bannerUrl: string;
   bannerEmoji?: string;
+  bannerType?: 'image' | 'emoji';
+  bannerImageUrl?: string;
+  bannerBackgroundColor?: string;
+  bannerGradient?: string;
+  bannerText?: string;
   startDate: Date;
   endDate: Date;
   rules: string;

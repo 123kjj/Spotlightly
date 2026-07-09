@@ -7,6 +7,7 @@ import { getContest, getApprovedEntries, getUserVotes, deleteContest, updateCont
 import { Contest, Entry } from '@/types';
 import { useAuth } from '@/lib/auth-context';
 import EntryCard from '@/components/entry/EntryCard';
+import ContestBanner from '@/components/contest/ContestBanner';
 import { Calendar, Gift, Trophy, Share2, Plus, Users, Trash2, Pencil, Check, X } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -160,11 +161,14 @@ export default function ContestPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Banner */}
-      <div className="relative rounded-3xl overflow-hidden mb-8 h-64 md:h-80 bg-gradient-to-br from-purple-200 via-pink-100 to-blue-200 flex items-center justify-center">
-        <span className="text-9xl drop-shadow-sm">{contest.bannerEmoji ?? '🏆'}</span>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-
-        <div className="absolute bottom-6 left-6 right-6">
+      <div className="relative rounded-3xl overflow-hidden mb-8">
+        <ContestBanner
+          contest={contest}
+          height="h-64 md:h-80"
+          className="rounded-3xl"
+          onBannerUpdated={updated => setContest(c => c ? { ...c, ...updated } : c)}
+        />
+        <div className="absolute bottom-6 left-6 right-6 z-10">
           <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium glass mb-3 ${
             isActive ? 'text-green-700' : isEnded ? 'text-gray-500' : 'text-blue-700'
           }`}>

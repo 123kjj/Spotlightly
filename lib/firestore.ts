@@ -4,7 +4,7 @@ import {
   increment, serverTimestamp, Timestamp, setDoc
 } from 'firebase/firestore';
 import { db } from './firebase';
-import { Contest, Entry, Vote, Report, RejectionReason, Flyer } from '@/types';
+import { Contest, Entry, Vote, Report, RejectionReason } from '@/types';
 
 // ── Contests ──────────────────────────────────────────────────────────────────
 
@@ -72,6 +72,11 @@ function firestoreContestToContest(id: string, data: Record<string, unknown>): C
     description: data.description as string,
     bannerUrl: data.bannerUrl as string,
     bannerEmoji: data.bannerEmoji as string | undefined,
+    bannerType: data.bannerType as 'image' | 'emoji' | undefined,
+    bannerImageUrl: data.bannerImageUrl as string | undefined,
+    bannerBackgroundColor: data.bannerBackgroundColor as string | undefined,
+    bannerGradient: data.bannerGradient as string | undefined,
+    bannerText: data.bannerText as string | undefined,
     startDate,
     endDate,
     rules: data.rules as string,
@@ -245,46 +250,22 @@ export async function getAllPendingEntries(): Promise<Entry[]> {
   return snap.docs.map(d => firestoreEntryToEntry(d.id, d.data()));
 }
 
-// ── Flyers ────────────────────────────────────────────────────────────────────
+// ── Banner Customization ──────────────────────────────────────────────────────
 
-export async function createFlyer(data: Omit<Flyer, 'id' | 'createdAt'>) {
+export interface BannerData {
+  bannerType: 'image' | 'emoji';
+  bannerImageUrl?: string;
+  bannerEmoji?: string;
+  bannerBackgroundColor?: string;
+  bannerGradient?: string;
+  bannerText?: string;
+}
+
+export async function updateContestBanner(contestId: string, data: BannerData) {
   const cleanData = Object.fromEntries(
     Object.entries(data).filter(([, v]) => v !== undefined)
   );
-  const ref = await addDoc(collection(db, 'flyers'), {
-    ...cleanData,
-    createdAt: serverTimestamp(),
-  });
-  return ref.id;
-}
-
-export async function getActiveFlyers(): Promise<Flyer[]> {
-  const snap = await getDocs(
-    query(collection(db, 'flyers'), orderBy('createdAt', 'desc'))
-  );
-  return snap.docs.map(d => {
-    const data = d.data();
-    return {
-      id: d.id,
-      contestId: data.contestId,
-      creatorUid: data.creatorUid,
-      imageUrl: data.imageUrl,
-      flyerTitle: data.flyerTitle,
-      description: data.description,
-      createdAt: (data.createdAt as Timestamp)?.toDate() ?? new Date(),
-    } as Flyer;
-  });
-}
-
-export async function getUserContests(uid: string): Promise<Contest[]> {
-  const snap = await getDocs(
-    query(collection(db, 'contests'), where('createdBy', '==', uid), orderBy('createdAt', 'desc'))
-  );
-  return snap.docs.map(d => firestoreContestToContest(d.id, d.data()));
-}
-
-export async function deleteFlyer(flyerId: string) {
-  await deleteDoc(doc(db, 'flyers', flyerId));
+  await updateDoc(doc(db, 'contests', contestId), cleanData);
 }
 
 // ── Contact Messages ────────────────────────────────────────────────────────
