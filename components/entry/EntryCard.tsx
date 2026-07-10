@@ -78,11 +78,28 @@ export default function EntryCard({ entry, contestId, hasVoted, onVoteChange, ra
               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
               onError={(e) => {
                 const img = e.target as HTMLImageElement;
-                // Try hqdefault if maxresdefault fails
-                if (entry.youtubeId && !img.src.includes('hqdefault')) {
-                  img.src = `https://img.youtube.com/vi/${entry.youtubeId}/hqdefault.jpg`;
+                const id = entry.youtubeId;
+                if (id && img.src.includes('maxresdefault')) {
+                  img.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+                } else if (id && img.src.includes('hqdefault')) {
+                  img.src = `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+                } else if (id && img.src.includes('mqdefault')) {
+                  img.src = `https://img.youtube.com/vi/${id}/default.jpg`;
                 } else {
-                  // Final fallback — hide broken image, show emoji placeholder
+                  img.style.display = 'none';
+                }
+              }}
+            />
+          ) : entry.youtubeId ? (
+            <img
+              src={`https://img.youtube.com/vi/${entry.youtubeId}/hqdefault.jpg`}
+              alt={entry.entryTitle}
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+              onError={(e) => {
+                const img = e.target as HTMLImageElement;
+                if (!img.src.includes('default.jpg') || img.src.includes('hq') || img.src.includes('mq')) {
+                  img.src = `https://img.youtube.com/vi/${entry.youtubeId}/default.jpg`;
+                } else {
                   img.style.display = 'none';
                 }
               }}

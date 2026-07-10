@@ -170,7 +170,14 @@ function firestoreEntryToEntry(id: string, data: Record<string, unknown>): Entry
     entryTitle: data.entryTitle as string,
     youtubeUrl: data.youtubeUrl as string,
     youtubeId: data.youtubeId as string,
-    thumbnailUrl: data.thumbnailUrl as string,
+    // Auto-fix old entries that stored maxresdefault (often blank) — upgrade to hqdefault
+    thumbnailUrl: (() => {
+      const stored = data.thumbnailUrl as string;
+      const youtubeId = data.youtubeId as string;
+      if (!stored && youtubeId) return `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
+      if (stored?.includes('maxresdefault') && youtubeId) return `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
+      return stored ?? '';
+    })(),
     videoTitle: data.videoTitle as string,
     description: data.description as string | undefined,
     voteCount: data.voteCount as number,
@@ -315,7 +322,8 @@ export function extractYouTubeId(url: string): string | null {
 }
 
 export function getYouTubeThumbnail(videoId: string): string {
-  return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+  // hqdefault (480x360) is always available; maxresdefault often returns blank
+  return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 }
 
 export async function validateVideoUrl(url: string): Promise<VideoData> {
