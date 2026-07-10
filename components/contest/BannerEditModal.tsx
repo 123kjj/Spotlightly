@@ -184,19 +184,24 @@ export default function BannerEditModal({ contest, onClose, onSaved }: Props) {
                   </div>
                 </div>
               ) : (
-                <div
-                  onDragOver={e => { e.preventDefault(); setIsDragging(true); }}
-                  onDragLeave={() => setIsDragging(false)}
-                  onDrop={onDrop}
-                  onClick={() => fileInputRef.current?.click()}
-                  className={`border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all ${
-                    isDragging ? 'border-purple-500 bg-purple-50/50' : 'border-purple-200 hover:border-purple-400 hover:bg-purple-50/20'
-                  }`}
-                >
-                  <Upload className="w-8 h-8 text-purple-300 mx-auto mb-3" />
-                  <p className="text-purple-700 font-medium mb-1">Drag & drop or click to upload</p>
-                  <p className="text-xs text-gray-400">PNG, JPG, JPEG, WEBP · Max 10MB</p>
-                </div>
+                <>
+                  <p className="text-xs text-gray-500 mb-3">
+                    📐 <strong>Recommended:</strong> 1200 × 400 px (3:1 ratio) · PNG, JPG, WEBP · Max 10MB
+                  </p>
+                  <div
+                    onDragOver={e => { e.preventDefault(); setIsDragging(true); }}
+                    onDragLeave={() => setIsDragging(false)}
+                    onDrop={onDrop}
+                    onClick={() => fileInputRef.current?.click()}
+                    className={`border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all ${
+                      isDragging ? 'border-purple-500 bg-purple-50/50' : 'border-purple-200 hover:border-purple-400 hover:bg-purple-50/20'
+                    }`}
+                  >
+                    <Upload className="w-8 h-8 text-purple-300 mx-auto mb-3" />
+                    <p className="text-purple-700 font-medium mb-1">Drag & drop or click to upload</p>
+                    <p className="text-xs text-gray-400">1200 × 400 px recommended</p>
+                  </div>
+                </>
               )}
               <input ref={fileInputRef} type="file" accept={ACCEPTED.join(',')} className="hidden"
                 onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />

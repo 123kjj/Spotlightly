@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { createContest } from '@/lib/firestore';
 import { useAuth } from '@/lib/auth-context';
-import { Sparkles, Trophy, Calendar, Gift, FileText, Image } from 'lucide-react';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/lib/firebase';
+import { Sparkles, Trophy, Calendar, Gift, FileText, Image, Upload, X } from 'lucide-react';
 import Link from 'next/link';
 
 const BANNER_EMOJIS = [
@@ -18,6 +20,10 @@ export default function CreateContestPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [bannerImageFile, setBannerImageFile] = useState<File | null>(null);
+  const [bannerImagePreview, setBannerImagePreview] = useState<string | null>(null);
+  const [bannerMode, setBannerMode] = useState<'emoji' | 'image'>('emoji');
 
   const [form, setForm] = useState({
     title: '',
@@ -37,6 +43,18 @@ export default function CreateContestPage() {
     setForm(f => ({ ...f, [field]: value }));
   }
 
+  function handleBannerFile(file: File) {
+    const accepted = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+    if (!accepted.includes(file.type)) { setError('Please upload PNG, JPG, JPEG, or WEBP.'); return; }
+    if (file.size > 10 * 1024 * 1024) { setError('Image must be under 10MB.'); return; }
+    setBannerImageFile(file);
+    const reader = new FileReader();
+    reader.onload = e => setBannerImagePreview(e.target?.result as string);
+    reader.readAsDataURL(file);
+    setBannerMode('image');
+    setError('');
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!user) return;
@@ -48,27 +66,31 @@ export default function CreateContestPage() {
     }
 
     if (form.rewardAvailable) {
-      if (!form.rewardTitle.trim()) {
-        setError('Please provide a reward title.');
-        return;
-      }
-      if (!form.rewardDescription.trim()) {
-        setError('Please provide a reward description.');
-        return;
-      }
-      if (!form.hostEmail.trim()) {
-        setError('Please provide a contact email so winners know how to claim their reward.');
-        return;
-      }
+      if (!form.rewardTitle.trim()) { setError('Please provide a reward title.'); return; }
+      if (!form.rewardDescription.trim()) { setError('Please provide a reward description.'); return; }
+      if (!form.hostEmail.trim()) { setError('Please provide a contact email so winners know how to claim their reward.'); return; }
     }
 
     setLoading(true);
     try {
+      let bannerImageUrl: string | undefined;
+      if (bannerMode === 'image' && bannerImageFile) {
+        const safeName = bannerImageFile.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 80);
+        const storageRef = ref(storage, `banners/create/${user.uid}/${Date.now()}_${safeName}`);
+        const task = uploadBytesResumable(storageRef, bannerImageFile);
+        bannerImageUrl = await new Promise<string>((resolve, reject) => {
+          task.on('state_changed', () => {}, reject,
+            async () => resolve(await getDownloadURL(task.snapshot.ref)));
+        });
+      }
+
       const id = await createContest({
         title: form.title,
         description: form.description,
-        bannerUrl: form.bannerUrl,
-        bannerEmoji: form.bannerEmoji,
+        bannerUrl: bannerImageUrl ?? '',
+        bannerEmoji: bannerMode === 'emoji' ? form.bannerEmoji : undefined,
+        bannerType: bannerMode,
+        bannerImageUrl: bannerImageUrl,
         startDate: new Date(form.startDate),
         endDate: new Date(form.endDate),
         rules: form.rules,
@@ -145,30 +167,75 @@ export default function CreateContestPage() {
           <h2 className="font-bold text-purple-900 flex items-center gap-2">
             <Image className="w-4 h-4" /> Contest Banner
           </h2>
-          <div>
-            <label className="block text-sm font-medium text-purple-700 mb-3">Choose an Emoji</label>
-            <div className="grid grid-cols-6 sm:grid-cols-8 gap-2">
-              {BANNER_EMOJIS.map(emoji => (
-                <button
-                  key={emoji}
-                  type="button"
-                  onClick={() => update('bannerEmoji', emoji)}
-                  className={`aspect-square rounded-2xl flex items-center justify-center text-2xl transition-all ${
-                    form.bannerEmoji === emoji
-                      ? 'bg-gradient-to-br from-purple-200 to-pink-200 ring-2 ring-purple-400 scale-110'
-                      : 'glass hover:bg-purple-50/50 hover:scale-105'
-                  }`}
-                >
-                  {emoji}
-                </button>
-              ))}
-            </div>
-            <div className="mt-4 flex items-center justify-center">
-              <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-purple-200 via-pink-100 to-blue-200 flex items-center justify-center text-5xl shadow-inner">
-                {form.bannerEmoji}
+
+          {/* Mode toggle */}
+          <div className="flex gap-2 p-1 glass rounded-2xl">
+            <button type="button" onClick={() => setBannerMode('emoji')}
+              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-medium transition-all ${bannerMode === 'emoji' ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white shadow' : 'text-purple-600 hover:bg-purple-50/50'}`}>
+              😊 Emoji
+            </button>
+            <button type="button" onClick={() => { setBannerMode('image'); fileInputRef.current?.click(); }}
+              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-medium transition-all ${bannerMode === 'image' ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white shadow' : 'text-purple-600 hover:bg-purple-50/50'}`}>
+              <Upload className="w-4 h-4" /> Upload Banner
+            </button>
+          </div>
+
+          {/* Emoji picker */}
+          {bannerMode === 'emoji' && (
+            <div>
+              <label className="block text-sm font-medium text-purple-700 mb-3">Choose an Emoji</label>
+              <div className="grid grid-cols-6 sm:grid-cols-8 gap-2">
+                {BANNER_EMOJIS.map(emoji => (
+                  <button key={emoji} type="button" onClick={() => update('bannerEmoji', emoji)}
+                    className={`aspect-square rounded-2xl flex items-center justify-center text-2xl transition-all ${
+                      form.bannerEmoji === emoji
+                        ? 'bg-gradient-to-br from-purple-200 to-pink-200 ring-2 ring-purple-400 scale-110'
+                        : 'glass hover:bg-purple-50/50 hover:scale-105'
+                    }`}>
+                    {emoji}
+                  </button>
+                ))}
+              </div>
+              <div className="mt-4 flex items-center justify-center">
+                <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-purple-200 via-pink-100 to-blue-200 flex items-center justify-center text-5xl shadow-inner">
+                  {form.bannerEmoji}
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
+          {/* Image upload */}
+          {bannerMode === 'image' && (
+            <div>
+              <p className="text-xs text-gray-500 mb-3">
+                📐 <strong>Recommended dimensions:</strong> 1200 × 400 px (3:1 ratio) · PNG, JPG, WEBP · Max 10MB
+              </p>
+              {bannerImagePreview ? (
+                <div>
+                  <img src={bannerImagePreview} alt="Banner preview"
+                    className="w-full h-40 object-cover rounded-2xl border border-purple-100" />
+                  <div className="flex gap-2 mt-3">
+                    <button type="button" onClick={() => fileInputRef.current?.click()}
+                      className="btn-secondary text-sm flex-1 justify-center py-2">Replace</button>
+                    <button type="button" onClick={() => { setBannerImageFile(null); setBannerImagePreview(null); setBannerMode('emoji'); }}
+                      className="flex items-center gap-1 px-4 py-2 rounded-full text-sm text-red-500 border border-red-200 hover:bg-red-50 transition-all">
+                      <X className="w-4 h-4" /> Remove
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div onClick={() => fileInputRef.current?.click()}
+                  className="border-2 border-dashed border-purple-200 rounded-2xl p-8 text-center cursor-pointer hover:border-purple-400 hover:bg-purple-50/20 transition-all">
+                  <Upload className="w-8 h-8 text-purple-300 mx-auto mb-2" />
+                  <p className="text-purple-700 font-medium text-sm">Click to upload banner image</p>
+                  <p className="text-xs text-gray-400 mt-1">1200 × 400 px recommended</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/jpg,image/webp"
+            className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) handleBannerFile(f); }} />
         </div>
 
         {/* Dates */}
