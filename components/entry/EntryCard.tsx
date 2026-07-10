@@ -70,20 +70,35 @@ export default function EntryCard({ entry, contestId, hasVoted, onVoteChange, ra
       <div id={`entry-${entry.id}`} className="entry-card glass rounded-3xl overflow-hidden"
         style={{ boxShadow: '0 4px 24px rgba(124,58,237,0.1)' }}>
         {/* Thumbnail */}
-        <div className="relative aspect-video overflow-hidden">
-          <img
-            src={entry.thumbnailUrl}
-            alt={entry.entryTitle}
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${entry.youtubeId}/hqdefault.jpg`;
-            }}
-          />
+        <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100">
+          {entry.thumbnailUrl ? (
+            <img
+              src={entry.thumbnailUrl}
+              alt={entry.entryTitle}
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+              onError={(e) => {
+                const img = e.target as HTMLImageElement;
+                // Try hqdefault if maxresdefault fails
+                if (entry.youtubeId && !img.src.includes('hqdefault')) {
+                  img.src = `https://img.youtube.com/vi/${entry.youtubeId}/hqdefault.jpg`;
+                } else {
+                  // Final fallback — hide broken image, show emoji placeholder
+                  img.style.display = 'none';
+                }
+              }}
+            />
+          ) : null}
+
+          {/* Emoji placeholder shown when no thumbnail or image fails */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <span className="text-5xl opacity-40">🎬</span>
+          </div>
+
           <a
             href={entry.youtubeUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 hover:opacity-100 transition-opacity"
+            className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 hover:opacity-100 transition-opacity z-10"
           >
             <div className="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center shadow-lg">
               <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
@@ -93,7 +108,7 @@ export default function EntryCard({ entry, contestId, hasVoted, onVoteChange, ra
           </a>
 
           {rankEmoji && (
-            <div className="absolute top-2 left-2 text-2xl drop-shadow-lg">{rankEmoji}</div>
+            <div className="absolute top-2 left-2 text-2xl drop-shadow-lg z-10">{rankEmoji}</div>
           )}
         </div>
 
