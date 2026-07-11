@@ -61,7 +61,7 @@ export default function ContestBanner({ contest, height = 'h-48', className = ''
         {isOwner && (
           <button
             onClick={e => { e.stopPropagation(); e.preventDefault(); setShowModal(true); }}
-            className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold glass text-white hover:bg-white/30 transition-all z-10"
+            className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold glass text-black hover:bg-white/30 transition-all z-10"
             style={{ backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.4)' }}
           >
             <Pencil className="w-3 h-3" /> Edit Banner

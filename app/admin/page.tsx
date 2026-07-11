@@ -49,6 +49,24 @@ export default function AdminPage() {
       await approveEntry(entry.id);
       setPending(prev => prev.filter(e => e.id !== entry.id));
       setReviewed(prev => [{ ...entry, status: 'approved', reviewedAt: new Date() }, ...prev]);
+
+      // Send approval email — best-effort, don't block UI on failure
+      try {
+        const contest = await getContest(entry.contestId);
+        await fetch('/api/send-approval-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            entrantEmail: entry.email,
+            entrantName: entry.fullName,
+            contestTitle: contest?.title ?? 'Spotlightly Contest',
+            entryTitle: entry.entryTitle,
+            contestUrl: `${window.location.origin}/contest/${entry.contestId}`,
+          }),
+        });
+      } catch (emailErr) {
+        console.error('Failed to send approval email:', emailErr);
+      }
     } finally {
       setApprovingId(null);
     }
